@@ -137,7 +137,7 @@ to be used as an arbitrary css selector. For example, </p>
 
 <ul>
 <li><code>{'$.bar, .baz': "asdf"}</code> will set the inner html of bar an baz elements to "asdf".</li>
-<li><code>{'$a:title': function(el){ el.append(" (" + el.attr("title") + ")"; }}</code> will add a parenthetical explanation to the text of each link with a title attribute.</li>
+<li><code>{'$a:title': function(el){ el.append(" (" + el.attr("title") + ")"); }}</code> will add a parenthetical explanation to the text of each link with a title attribute.</li>
 <li><code>{'$:text': {"val()": "yo"}}</code> will set the text of all text inputs/textareas to "yo".</li>
 </ul>             </td>             <td class="code">               <div class="highlight"><pre>      <span class="s2">&quot;class or css selector&quot;</span><span class="o">:</span> <span class="nf">(propertyName, analog) -&gt;</span>
         <span class="nv">pattern = </span>
