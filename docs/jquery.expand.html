@@ -155,9 +155,12 @@ as a pattern which is equivalent to all of the patterns listed above
 (specifically, applied in order).</p>
 
 <p>If all the patterns are predicate functions, $.expand.compose is equivalent
-to an <code>&amp;&amp;</code> operation on the results of the functions.</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nv">compose: </span><span class="nf">() -&gt;</span> <span class="nv">expansions = </span><span class="nx">arguments</span> <span class="k">return</span> <span class="nf">(element) -&gt;</span>
-      <span class="nx">expandTemplateInPlace</span> <span class="nx">element</span><span class="p">,</span> <span class="nx">expansion</span> <span class="k">for</span> <span class="nx">expansion</span> <span class="k">in</span> <span class="nx">expansions</span>
-      <span class="k">return</span> <span class="kc">null</span>
+to an <code>&amp;&amp;</code> operation on the results of the functions.</p>             </td>             <td class="code">               <div class="highlight"><pre>    
+    <span class="nv">compose: </span><span class="nf">() -&gt;</span> 
+      <span class="nv">expansions = </span><span class="nx">arguments</span> 
+      <span class="k">return</span> <span class="nf">(element) -&gt;</span>
+        <span class="nx">expandTemplateInPlace</span> <span class="nx">element</span><span class="p">,</span> <span class="nx">expansion</span> <span class="k">for</span> <span class="nx">expansion</span> <span class="k">in</span> <span class="nx">expansions</span>
+        <span class="k">return</span> <span class="kc">null</span>
 
   <span class="nv">$.fn.expand = </span><span class="nf">(expansion) -&gt;</span>
     <span class="nv">element = </span><span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">[</span><span class="mi">0</span><span class="p">]).</span><span class="nx">clone</span><span class="p">(</span><span class="kc">true</span><span class="p">)</span>

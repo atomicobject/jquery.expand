@@ -11,6 +11,8 @@
         element.remove();
       } else if (/^(?:number|string)$/.test(typeof expansion) || expansion instanceof jQuery) {
         element.html(expansion);
+      } else if ($.isFunction(expansion)) {
+        return expandTemplateInPlace(element, expansion(element));
       } else if (expansion.constructor === Array) {
         childTemplate = element.children()[0];
         fragment = document.createDocumentFragment();
@@ -22,8 +24,6 @@
           }
         }
         element.html(fragment);
-      } else if ($.isFunction(expansion)) {
-        return expandTemplateInPlace(element, expansion(element));
       } else if (typeof expansion === 'object') {
         syntax = $.expand.KEY_SYNTAX;
         for (propertyName in expansion) {

@@ -202,9 +202,12 @@
     #
     # If all the patterns are predicate functions, $.expand.compose is equivalent
     # to an `&&` operation on the results of the functions.
-    compose: () -> expansions = arguments return (element) ->
-      expandTemplateInPlace element, expansion for expansion in expansions
-      return null
+    
+    compose: () -> 
+      expansions = arguments 
+      return (element) ->
+        expandTemplateInPlace element, expansion for expansion in expansions
+        return null
 
   $.fn.expand = (expansion) ->
     element = $(this[0]).clone(true)
