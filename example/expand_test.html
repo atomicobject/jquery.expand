@@ -1,0 +1,51 @@
+<html>
+  <head>
+    <script src="./jquery.js" type="text/javascript"></script>
+    <script src="../compiled/jquery.expand.min.js" type="text/javascript"></script>
+  </head>
+  <body>
+    <ul id="results">
+    </ul>
+
+    <ul id="warehouse" style="display:none;">
+      <li class="template"><span class="name"></span> <span class="result"></span></li>
+      <li class="attributes"><span class="name"></span> <span class="result">OK</span></li>
+      <li class="addClass"><span class="name"></span> <span class="result">OK</span></li>
+      <li class="array"><span class="name"></span> <span class="result"><span></span></span></li>
+      <li class="false"><span class="name"></span> <span class="not">NOT</span> <span class="result">OK<span></span></span></li>
+    </ul>
+
+    <script type="text/javascript">
+      var results = $("#results");
+      var baseTempl = $("#warehouse .template");
+      
+      $(function() {
+        var start = new Date();
+
+        results.append(baseTempl.expand({name: "class", result: "OK"}));
+        results.append(baseTempl.expand({name: "css", '$.result': "OK"}));
+        results.append(baseTempl.expand({name: "html", result: { "html()": "OK"}}));
+        results.append(baseTempl.expand({name: "text", result: { "text()": "OK"}}));
+        results.append($("#warehouse .addClass").expand({name: "addClass", result: { "addClass()": "classy" }}));
+        results.append(baseTempl.expand({name: "function", result: function(el){ el.html("OK") }}));
+        results.append($("#warehouse .array").expand({name: "array", result: ["O", "K"]}));
+        results.append($("#warehouse .attributes").expand({name: "attributes", result: { "@data-okayed": "yes"}}));
+        results.append(baseTempl.expand({name: "function returning object", result: function(el){ return {"html()": "OK"}}}));
+        results.append(baseTempl.expand({name: "function returning object with function", result: function(el){ return {"html()": function(){ return "OK" }}}}));
+        results.append(baseTempl.expand($.expand.compose({name: "compose"}, function(e){ e.find(".result").html("OK") })));
+        results.append($("#warehouse .false").expand({name: "false", not: false}));
+        results.append($("#warehouse .array").expand({name: "zero", result: [0, "K"]}));
+
+        var end = new Date();
+        $(document.body).append(end - start);
+      });
+    </script>
+
+    <style type="text/css">
+      #results .attributes .result { display: none; }
+      #results .attributes .result[data-okayed] { display: inline; }
+      #results .addClass .result { display: none; }
+      #results .addClass .result.classy { display: inline; }
+    </style>
+  </body>
+</html>

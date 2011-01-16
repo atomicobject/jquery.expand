@@ -1,0 +1,70 @@
+<!DOCTYPE html>  <html> <head>   <title>jquery.expand.coffee</title>   <meta http-equiv="content-type" content="text/html; charset=UTF-8">   <link rel="stylesheet" media="all" href="docco.css" /> </head> <body>   <div id="container">     <div id="background"></div>          <table cellpadding="0" cellspacing="0">       <thead>         <tr>           <th class="docs">             <h1>               jquery.expand.coffee             </h1>           </th>           <th class="code">           </th>         </tr>       </thead>       <tbody>                               <tr id="section-1">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-1">&#182;</a>               </div>               <p><em>jquery.expand</em> is a templating system that </p>             </td>             <td class="code">               <div class="highlight"><pre><span class="p">(</span><span class="nf">($) -&gt;</span>
+  <span class="nv">expandTemplateInPlace = </span><span class="nf">(element, expansion) -&gt;</span>
+    <span class="k">return</span> <span class="nx">element</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="nx">expansion</span> <span class="k">in</span> <span class="p">[</span><span class="kc">null</span><span class="p">,</span> <span class="kc">undefined</span><span class="p">,</span> <span class="kc">true</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="nx">expansion</span> <span class="o">==</span> <span class="kc">false</span>
+      <span class="nx">element</span><span class="p">.</span><span class="nx">remove</span><span class="p">()</span> 
+
+    <span class="k">else</span> <span class="k">if</span> <span class="sr">/^(?:number|string)$/</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="k">typeof</span><span class="p">(</span><span class="nx">expansion</span><span class="p">))</span> <span class="o">||</span> <span class="nx">expansion</span> <span class="k">instanceof</span> <span class="nx">jQuery</span>
+      <span class="nx">element</span><span class="p">.</span><span class="nx">html</span> <span class="nx">expansion</span>
+
+    <span class="k">else</span> <span class="k">if</span> <span class="nx">expansion</span><span class="p">.</span><span class="nx">constructor</span> <span class="o">==</span> <span class="nb">Array</span>
+      <span class="nv">childTemplate = </span><span class="nx">element</span><span class="p">.</span><span class="nx">children</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+      <span class="nv">fragment = </span><span class="nb">document</span><span class="p">.</span><span class="nx">createDocumentFragment</span><span class="p">()</span>
+      <span class="k">if</span> <span class="nx">childTemplate</span>
+        <span class="k">for</span> <span class="nx">matchExpansion</span> <span class="k">in</span> <span class="nx">expansion</span>
+          <span class="nv">expanded = </span><span class="nx">expandTemplateInPlace</span> <span class="nx">$</span><span class="p">(</span><span class="nx">childTemplate</span><span class="p">).</span><span class="nx">clone</span><span class="p">(</span><span class="kc">true</span><span class="p">),</span> <span class="nx">matchExpansion</span>
+          <span class="nx">fragment</span><span class="p">.</span><span class="nx">appendChild</span> <span class="nx">expanded</span>
+      <span class="nx">element</span><span class="p">.</span><span class="nx">html</span> <span class="nx">fragment</span>
+
+    <span class="k">else</span> <span class="k">if</span> <span class="nx">$</span><span class="p">.</span><span class="nx">isFunction</span> <span class="nx">expansion</span>
+      <span class="k">return</span> <span class="nx">expandTemplateInPlace</span> <span class="nx">element</span><span class="p">,</span> <span class="nx">expansion</span><span class="p">(</span><span class="nx">element</span><span class="p">)</span>
+
+    <span class="k">else</span> <span class="k">if</span> <span class="k">typeof</span><span class="p">(</span><span class="nx">expansion</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;object&#39;</span>
+      <span class="nv">syntax = </span><span class="nx">$</span><span class="p">.</span><span class="nx">expand</span><span class="p">.</span><span class="nx">KEY_SYNTAX</span>
+      <span class="k">for</span> <span class="nx">own</span> <span class="nx">propertyName</span><span class="p">,</span> <span class="nx">property</span> <span class="k">of</span> <span class="nx">expansion</span>
+        <span class="k">for</span> <span class="nx">own</span> <span class="nx">_</span><span class="p">,</span> <span class="nx">rule</span> <span class="k">of</span> <span class="nx">syntax</span>
+          <span class="nv">result = </span><span class="nx">rule</span><span class="p">.</span><span class="nx">call</span> <span class="nx">element</span><span class="p">,</span> <span class="nx">propertyName</span><span class="p">,</span> <span class="nx">property</span>
+          <span class="nx">expandTemplateInPlace</span> <span class="nx">$</span><span class="p">(</span><span class="nx">result</span><span class="p">.</span><span class="nx">expand</span><span class="p">),</span> <span class="nx">result</span><span class="p">.</span><span class="nx">withExpansion</span> <span class="k">if</span> <span class="nx">result</span> <span class="o">&amp;&amp;</span> <span class="k">typeof</span><span class="p">(</span><span class="nx">result</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;object&quot;</span>
+          <span class="k">break</span> <span class="k">if</span> <span class="nx">result</span> <span class="o">!=</span> <span class="kc">false</span>
+
+    <span class="nx">element</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+  <span class="nv">$.expand =</span>
+    <span class="nv">KEY_SYNTAX:</span>
+      <span class="s2">&quot;@attributes&quot;</span><span class="o">:</span> <span class="nf">(propertyName, analog) -&gt;</span>
+        <span class="nv">match = </span><span class="sr">/^@([\w-]+)$/</span><span class="p">.</span><span class="nx">exec</span><span class="p">(</span><span class="nx">propertyName</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">false</span> <span class="nx">unless</span> <span class="nx">match</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="nx">match</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="nx">analog</span><span class="p">)</span>
+        <span class="kc">null</span>
+
+      <span class="s2">&quot;fn()&quot;</span><span class="o">:</span> <span class="nf">(propertyName, analog) -&gt;</span>
+        <span class="nv">match = </span><span class="sr">/^(\w+)\(\)$/</span><span class="p">.</span><span class="nx">exec</span><span class="p">(</span><span class="nx">propertyName</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">false</span> <span class="nx">unless</span> <span class="nx">match</span>
+        <span class="k">this</span><span class="p">[</span><span class="nx">match</span><span class="p">[</span><span class="mi">1</span><span class="p">]].</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">analog</span><span class="p">)</span>
+        <span class="kc">null</span>
+
+      <span class="s2">&quot;class or css selector&quot;</span><span class="o">:</span> <span class="nf">(propertyName, analog) -&gt;</span>
+        <span class="nv">pattern = </span>
+          <span class="k">if</span> <span class="nx">propertyName</span><span class="p">.</span><span class="nx">charAt</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;$&quot;</span>
+            <span class="nx">propertyName</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nx">propertyName</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span>
+          <span class="k">else</span>
+            <span class="s2">&quot;.&quot;</span> <span class="o">+</span> <span class="nx">propertyName</span>
+        <span class="nv">matches = </span><span class="k">this</span><span class="p">.</span><span class="nx">find</span> <span class="nx">pattern</span>
+        <span class="nx">expandTemplateInPlace</span> <span class="nx">$</span><span class="p">(</span><span class="nx">match</span><span class="p">),</span> <span class="nx">analog</span> <span class="k">for</span> <span class="nx">match</span> <span class="k">in</span> <span class="nx">matches</span>
+        <span class="kc">null</span>
+
+    <span class="nv">compose: </span><span class="nf">() -&gt;</span>
+      <span class="nv">expansions = </span><span class="nx">arguments</span>
+      <span class="k">return</span> <span class="nf">(element) -&gt;</span>
+        <span class="nx">expandTemplateInPlace</span> <span class="nx">element</span><span class="p">,</span> <span class="nx">expansion</span> <span class="k">for</span> <span class="nx">expansion</span> <span class="k">in</span> <span class="nx">expansions</span>
+        <span class="kc">null</span>
+
+  <span class="nv">$.fn.expand = </span><span class="nf">(expansion) -&gt;</span>
+    <span class="nv">element = </span><span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">[</span><span class="mi">0</span><span class="p">]).</span><span class="nx">clone</span><span class="p">(</span><span class="kc">true</span><span class="p">)</span>
+    <span class="nx">element</span><span class="p">.</span><span class="nx">removeAttr</span> <span class="s2">&quot;id&quot;</span>
+    <span class="nx">$</span> <span class="nx">expandTemplateInPlace</span><span class="p">(</span><span class="nx">element</span><span class="p">,</span> <span class="nx">expansion</span><span class="p">)</span>
+
+<span class="p">)(</span><span class="nx">jQuery</span><span class="p">)</span>
+
+</pre></div>             </td>           </tr>                </tbody>     </table>   </div> </body> </html> 
