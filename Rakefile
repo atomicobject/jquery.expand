@@ -8,3 +8,10 @@ end
 task :docs do
   system "docco src/*.coffee"
 end
+
+task :update_gh_pages => :docs do
+  system "cp -r doc __updates__"
+  system "git co gh-pages"
+  system "cp __updates__/* ."
+  system "mv jquery.expand.html index.html"
+end
