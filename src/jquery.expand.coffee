@@ -277,4 +277,4 @@
 # License
 # =============
 #
-# *expand* is licensed under the MIT license, copywrite [Atomic Object](http://atomicobject.com).
+# *expand* is licensed under the MIT license, copyright [Atomic Object](http://atomicobject.com).
