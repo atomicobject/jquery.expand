@@ -3,13 +3,13 @@
   (function($) {
     var expandTemplateInPlace;
     expandTemplateInPlace = function(element, expansion) {
-      var childTemplate, expanded, fragment, matchExpansion, property, propertyName, result, rule, syntax, _, _i, _len;
+      var childTemplate, expanded, fragment, matchExpansion, property, propertyName, result, rule, syntax, _, _i, _len, _ref;
       if (expansion === null || expansion === void 0 || expansion === true) {
         return element[0];
       }
       if (expansion === false) {
         element.remove();
-      } else if (/^(?:number|string)$/.test(typeof expansion) || expansion instanceof jQuery) {
+      } else if (((_ref = typeof expansion) === "number" || _ref === "string") || expansion instanceof jQuery) {
         element.html(expansion);
       } else if ($.isFunction(expansion)) {
         return expandTemplateInPlace(element, expansion(element));
@@ -88,11 +88,20 @@
         };
       }
     };
-    return $.fn.expand = function(expansion) {
+    $.fn.expand = function(expansion) {
       var element;
       element = $(this[0]).clone(true);
       element.removeAttr("id");
-      return $(expandTemplateInPlace(element, expansion));
+      expandTemplateInPlace(element, expansion);
+      return element;
+    };
+    return $.fn.expandInPlace = function(expansion) {
+      var element, _i, _len;
+      for (_i = 0, _len = this.length; _i < _len; _i++) {
+        element = this[_i];
+        expandTemplateInPlace($(element), expansion);
+      }
+      return this;
     };
   })(jQuery);
 }).call(this);

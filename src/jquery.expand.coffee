@@ -1,6 +1,50 @@
-# *jquery.expand* is a jquery templating engine we've been using internally on 
-# various projects for the past year or so. 
+# *jquery.expand* is a templating plugin for jquery.
 #
+# *expand* tries to be to templating what CSS is to styling. Templating is unobtrusive.
+# In fact, templates are just normal DOM nodes. Transformations on the templates
+# are specified via a powerful JSON DSL.
+#
+# Basic usage is `$(cssSelector).expand(expansionValue)` which returns a new,
+# detached DOM node (wrapped in a jquery object) to be inserted back in the dom
+# wherever you want.
+#
+# Let's start with a simple example
+#
+#     <div id="adr-template" class="adr">
+#       <div class="street-address"></div>
+#       <div class="extended-address"></div>
+#       <span class="locality"></span>,
+#       <span class="region"></span>
+#       <span class="postal-code"></span>
+#       <div class="country-name"></div>
+#     </div>
+# 
+# This element can be used as a template like this:
+#
+#     var myAdr = $("#adr-template").expand({
+#       "street-address": "941 Wealthy St SE",
+#       "locality": "Grand Rapids",
+#       "region": "MI",
+#       "postal-code": "49506",
+#       "country-name": false
+#     });
+#
+# After executing, the variable `myAdr` has a reference to a new, jQuery-wrapped
+# DOM node that is not attached to the DOM. You can then manipulate myAdr if desired,
+# or add it directly. The resulting node has markup like this:
+# 
+#     <div class="adr">
+#       <div class="street-address">941 Wealthy St SE</div>
+#       <div class="extended-address"></div>
+#       <span class="locality">Grand Rapids</span>,
+#       <span class="region">MI</span>
+#       <span class="postal-code">49506</span>
+#     </div>
+#
+# This simple example is just the tip of the iceberg. The templating "language" spans
+# the entire tower of types provide by JSON, and powerful mechanisms for manipulating
+# are provided through different key syntaxes.
+# 
 # Types of patterns
 # ==================
 #
@@ -13,10 +57,10 @@
 
     # `false` causes the element to be removed.
     if expansion == false
-      element.remove() 
+      element.remove()
 
     # numbers, strings, and jquery (dom) objects are set as the inner html of the element.
-    else if /^(?:number|string)$/.test(typeof(expansion)) || expansion instanceof jQuery
+    else if typeof(expansion) in ["number", "string"] or expansion instanceof jQuery
       element.html expansion
 
 
@@ -86,26 +130,26 @@
     #
     # The simplest type of object pattern is what you'd normally see in a JSON
     # object. Let's say you had an object called `name` defined by 
-    
+    #
     # `{ first_name: "John", last_name: "Smith" }` 
-    
+    #
     # returned by an AJAX call, and you want to populate a few elements on the
     # page, with the template:
-    
+    #
     #     <div id="name">
     #       <span class="first_name"></span>
     #       <span class="last_name"></span>
     #     </div>
-    
+    #
     # In this simple (contrived) example, you could use interpolate your name
     # elements by simply calling `$("#name").expand(name)`. The result would be
     # a jquery object with the html
-    
+    #
     #     <div id="name">
     #       <span class="first_name">John</span>
     #       <span class="last_name">Smith</span>
     #     </div>
-    
+    #
     # To clarify, any property whose name is a simple (alphanumeric) string
     # assumes the property name is a class name and uses the value of the
     # property as a pattern to expand *every* element with that class within
@@ -184,7 +228,7 @@
       # * `{'$:text': {"val()": "yo"}}` will set the text of all text inputs/textareas to "yo".
 
       "class or css selector": (propertyName, analog) ->
-        pattern = 
+        pattern =
           if propertyName.charAt(0) == "$"
             propertyName.slice(1, propertyName.length)
           else
@@ -193,7 +237,8 @@
         expandTemplateInPlace $(match), analog for match in matches
         return null
 
-    # Composition -------------
+    # Composition 
+    # -------------
     #
     # Expand comes with a rudimentary composition function.
     # `$.expand.compose(pat1, pat2,...)` will return an object that can be used
@@ -203,8 +248,8 @@
     # If all the patterns are predicate functions, $.expand.compose is equivalent
     # to an `&&` operation on the results of the functions.
     
-    compose: () -> 
-      expansions = arguments 
+    compose: () ->
+      expansions = arguments
       return (element) ->
         expandTemplateInPlace element, expansion for expansion in expansions
         return null
@@ -212,6 +257,24 @@
   $.fn.expand = (expansion) ->
     element = $(this[0]).clone(true)
     element.removeAttr "id"
-    $ expandTemplateInPlace(element, expansion)
+    expandTemplateInPlace(element, expansion)
+    return element
+
+  # expandInPlace
+  # =================
+  #
+  # You can also use `expandInPlace` to update a template in place. This needs to be used carefully,
+  # however. Since you're changing the template node, it's possible to change it in a way that it will
+  # not work in the future (if nodes are removed, for example). The DOM is also updated while the node
+  # is attached, potentially leading to performance problems as the browser redraws the page.
+  $.fn.expandInPlace = (expansion) ->
+    expandTemplateInPlace($(element), expansion) for element in this
+    return this
 
 )(jQuery)
+
+
+# License
+# =============
+#
+# *expand* is licensed under the MIT license, copywrite [Atomic Object](http://atomicobject.com).

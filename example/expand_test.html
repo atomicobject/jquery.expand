@@ -36,6 +36,9 @@
         results.append($("#warehouse .false").expand({name: "false", not: false}));
         results.append($("#warehouse .array").expand({name: "zero", result: [0, "K"]}));
 
+        results.append(baseTempl.clone().attr("id", "inPlace"))
+        $("#inPlace").expandInPlace({name: "In place", result: "OK"});
+
         var end = new Date();
         $(document.body).append(end - start);
       });
