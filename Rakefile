@@ -14,4 +14,5 @@ task :update_gh_pages => :docs do
   system "git co gh-pages"
   system "cp __updates__/* ."
   system "mv jquery.expand.html index.html"
+  system "rm -rf __updates__"
 end
