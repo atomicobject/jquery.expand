@@ -225,7 +225,7 @@
       #
       # * `{'$.bar, .baz': "asdf"}` will set the inner html of bar an baz elements to "asdf".
       # * `{'$a[title]': function(el){ el.append(" (" + el.attr("title") + ")"); }}` will add a parenthetical explanation to the text of each link with a title attribute.
-      # * `{'$:text': {"val()": "yo"}}` will set the text of all text inputs/textareas to "yo".
+      # * `{'$:text': {"val()": "foo"}}` will set the text of all text inputs/textareas to "foo".
 
       "class or css selector": (propertyName, analog) ->
         pattern =
