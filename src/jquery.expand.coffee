@@ -277,4 +277,11 @@
 # License
 # =============
 #
-# *expand* is licensed under the MIT license, copyright [Atomic Object](http://atomicobject.com).
+# *expand* is licensed under the MIT license.
+#
+# Author
+# ======
+# 
+# * Drew Colthorp (colthorp@atomicobject.com)
+# * © 2011 [Atomic Object](http://www.atomicobject.com/)
+# * More Atomic Object [open source](http://www.atomicobject.com/pages/Software+Commons) projects
