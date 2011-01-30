@@ -4,7 +4,7 @@
 # In fact, templates are just normal DOM nodes. Transformations on the templates
 # are specified via a powerful JSON DSL.
 #
-# Basic usage is `$(cssSelector).expand(expansionValue)` which returns a new,
+# Basic usage is `$(cssSelector).expand(directive)` which returns a new,
 # detached DOM node (wrapped in a jquery object) to be inserted back in the dom
 # wherever you want.
 #
@@ -44,24 +44,31 @@
 # This simple example is just the tip of the iceberg. The templating "language" spans
 # the entire tower of types provide by JSON, and powerful mechanisms for manipulating
 # are provided through different key syntaxes.
-# 
-# Types of patterns
-# ==================
-#
-# Simple patterns
-# -------------------
 (($) ->
-  expandTemplateInPlace = (element, expansion) ->
+
+  $.fn.expand = (directive) ->
+    element = $(this[0]).clone(true)
+    element.removeAttr "id"
+    expandTemplateInPlace(element, directive)
+    return element
+
+  # 
+  # Types of Directives
+  # ==================
+  expandTemplateInPlace = (element, directive) ->
+    #
+    # Simple Directives
+    # -------------------
     # `null`, `undefined`, and `true` all cause the element to be left untouched.
-    return element[0] if expansion in [null, undefined, true]
+    return element[0] if directive in [null, undefined, true]
 
     # `false` causes the element to be removed.
-    if expansion == false
+    if directive == false
       element.remove()
 
     # numbers, strings, and jquery (dom) objects are set as the inner html of the element.
-    else if typeof(expansion) in ["number", "string"] or expansion instanceof jQuery
-      element.html expansion
+    else if typeof(directive) in ["number", "string"] or directive instanceof jQuery
+      element.html directive
 
 
     # Functions
@@ -72,34 +79,34 @@
     # it in one of two ways.
     #
     # The first option is to simply mutate the element in place. At the point
-    # at which expansion happens, the element is detached from the DOM and so
+    # at which directive happens, the element is detached from the DOM and so
     # can be mutated efficiently. The function can change the element or remove
     # it and it will have the desired effect.
     #
-    # The second option is to return a new pattern. Expand recurses on the
+    # The second option is to return a new directive. Expand recurses on the
     # return value of the function. In this way, a null or undefined return
     # value has no effect, but there's a lot of power here. You can use a
-    # predicate function as a pattern, and a false return value will cause the
+    # predicate function as a directive, and a false return value will cause the
     # element to be removed.
 
-    else if $.isFunction expansion
-      return expandTemplateInPlace element, expansion(element)
+    else if $.isFunction directive
+      return expandTemplateInPlace element, directive(element)
 
 
     # Arrays
     # ------------------
     #
     # Arrays are a little tricky, but matches up very well with HTML once
-    # you're used to it. When the pattern is an array, the first child of the
+    # you're used to it. When the directive is an array, the first child of the
     # element is cloned once for each element of the array, and the array
-    # element is used as a pattern with witch to expand the cloned element. For
+    # element is used as a directive with witch to expand the cloned element. For
     # example, if your template is
     #
     #     <ul>
     #       <li></li>
     #     </ul>
     #
-    # and your pattern is `[1,2,3]`, then the `li` is cloned once for each array element, and the
+    # and your directive is `[1,2,3]`, then the `li` is cloned once for each array element, and the
     # result is
     #
     #     <ul>
@@ -108,27 +115,27 @@
     #       <li>3</li>
     #     </ul>
     # 
-    else if expansion.constructor == Array
+    else if directive.constructor == Array
       childTemplate = element.children()[0]
       fragment = document.createDocumentFragment()
       if childTemplate
-        for matchExpansion in expansion
-          expanded = expandTemplateInPlace $(childTemplate).clone(true), matchExpansion
+        for matchDirective in directive
+          expanded = expandTemplateInPlace $(childTemplate).clone(true), matchDirective
           fragment.appendChild expanded
       element.html fragment
 
     # Objects
     # ------------------
     #
-    # Object patterns are a lot like arrays in that they represent a
-    # combination of simpler expansions to perform on the element. Just as an
+    # Object directives are a lot like arrays in that they represent a
+    # combination of simpler directives to perform on the element. Just as an
     # object's properties are the constituent elements defining the object, an
-    # expansion object's properties are the constituent elements of the
-    # expansion to be performed. 
+    # directive object's properties are the constituent elements of the
+    # directive to be performed. 
     #
     # ### Classes
     #
-    # The simplest type of object pattern is what you'd normally see in a JSON
+    # The simplest type of object directive is what you'd normally see in a JSON
     # object. Let's say you had an object called `name` defined by 
     #
     # `{ first_name: "John", last_name: "Smith" }` 
@@ -152,13 +159,13 @@
     #
     # To clarify, any property whose name is a simple (alphanumeric) string
     # assumes the property name is a class name and uses the value of the
-    # property as a pattern to expand *every* element with that class within
+    # property as a directive to expand *every* element with that class within
     # the surrounding context.
     #
     # To take things a step furthery, it's important to realize that these
     # contexts stack.  If the value associated with a property is another
     # object, that object is used to expand only the element(s) matched by the
-    # key. This is just like CSS selectors. A pattern like
+    # key. This is just like CSS selectors. A directive like
     #
     # `{foo: {bar: "baz"}}`
     #
@@ -166,12 +173,12 @@
     # with class "foo" to have their inner html set to "baz". However, elements
     # with class "bar" that are not within a "foo" will not be affected.
 
-    else if typeof(expansion) == 'object'
+    else if typeof(directive) == 'object'
       syntax = $.expand.KEY_SYNTAX
-      for own propertyName, property of expansion
+      for own propertyName, property of directive
         for own _, rule of syntax
           result = rule.call element, propertyName, property
-          expandTemplateInPlace $(result.expand), result.withExpansion if result && typeof(result) == "object"
+          expandTemplateInPlace $(result.expand), result.withDirective if result && typeof(result) == "object"
           break if result != false
 
     element[0]
@@ -228,12 +235,12 @@
       # * `{'$:text': {"val()": "foo"}}` will set the text of all text inputs/textareas to "foo".
 
       "class or css selector": (propertyName, analog) ->
-        pattern =
+        directive =
           if propertyName.charAt(0) == "$"
             propertyName.slice(1, propertyName.length)
           else
             "." + propertyName
-        matches = this.find pattern
+        matches = this.find directive
         expandTemplateInPlace $(match), analog for match in matches
         return null
 
@@ -241,34 +248,30 @@
     # -------------
     #
     # Expand comes with a rudimentary composition function.
-    # `$.expand.compose(pat1, pat2,...)` will return an object that can be used
-    # as a pattern which is equivalent to all of the patterns listed above
-    # (specifically, applied in order).
+    # `$.expand.compose(directive1, directive2,...)` will return an object that can be used
+    # as a directive which is equivalent to applying the argument directives
+    # in order.
     #
-    # If all the patterns are predicate functions, $.expand.compose is equivalent
+    # If all the directives are predicate functions, $.expand.compose is equivalent
     # to an `&&` operation on the results of the functions.
     
     compose: () ->
-      expansions = arguments
+      directives = arguments
       return (element) ->
-        expandTemplateInPlace element, expansion for expansion in expansions
+        for directive in directives
+          expandTemplateInPlace element, directive
+          break if directive == false
         return null
-
-  $.fn.expand = (expansion) ->
-    element = $(this[0]).clone(true)
-    element.removeAttr "id"
-    expandTemplateInPlace(element, expansion)
-    return element
 
   # expandInPlace
   # =================
   #
   # You can also use `expandInPlace` to update a template in place. This needs to be used carefully,
   # however. Since you're changing the template node, it's possible to change it in a way that it will
-  # not work in the future (if nodes are removed, for example). The DOM is also updated while the node
+  # not work the same way in subsequent calls (if nodes are removed, for example). The DOM is also updated while the node
   # is attached, potentially leading to performance problems as the browser redraws the page.
-  $.fn.expandInPlace = (expansion) ->
-    expandTemplateInPlace($(element), expansion) for element in this
+  $.fn.expandInPlace = (directive) ->
+    expandTemplateInPlace($(element), directive) for element in this
     return this
 
 )(jQuery)
