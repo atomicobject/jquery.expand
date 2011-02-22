@@ -4,8 +4,7 @@
     var expandTemplateInPlace;
     $.fn.expand = function(directive) {
       var element;
-      element = $(this[0]).clone(true);
-      element.removeAttr("id");
+      element = this[0].nodeName === "SCRIPT" ? $(this.html()) : this.eq(0).clone(true).removeAttr("id");
       expandTemplateInPlace(element, directive);
       return element;
     };

@@ -49,8 +49,15 @@ the entire tower of types provide by JSON, and powerful mechanisms for manipulat
 are provided through different key syntaxes.</p>             </td>             <td class="code">               <div class="highlight"><pre><span class="p">(</span><span class="nf">($) -&gt;</span>
 
   <span class="nv">$.fn.expand = </span><span class="nf">(directive) -&gt;</span>
-    <span class="nv">element = </span><span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">[</span><span class="mi">0</span><span class="p">]).</span><span class="nx">clone</span><span class="p">(</span><span class="kc">true</span><span class="p">)</span>
-    <span class="nx">element</span><span class="p">.</span><span class="nx">removeAttr</span> <span class="s2">&quot;id&quot;</span>
+    <span class="nv">element = </span>
+      <span class="k">if</span> <span class="k">this</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">nodeName</span> <span class="o">==</span> <span class="s2">&quot;SCRIPT&quot;</span> 
+        <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">html</span><span class="p">())</span>
+      <span class="k">else</span>
+        <span class="k">this</span><span class="p">.</span>
+          <span class="nx">eq</span><span class="p">(</span><span class="mi">0</span><span class="p">).</span>
+          <span class="nx">clone</span><span class="p">(</span><span class="kc">true</span><span class="p">).</span>
+          <span class="nx">removeAttr</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">)</span>
+
     <span class="nx">expandTemplateInPlace</span><span class="p">(</span><span class="nx">element</span><span class="p">,</span> <span class="nx">directive</span><span class="p">)</span>
     <span class="k">return</span> <span class="nx">element</span></pre></div>             </td>           </tr>                               <tr id="section-2">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-2">&#182;</a>               </div>               <h1>Types of Directives</h1>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nv">expandTemplateInPlace = </span><span class="nf">(element, directive) -&gt;</span></pre></div>             </td>           </tr>                               <tr id="section-3">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-3">&#182;</a>               </div>               <h2>Simple Directives</h2>
 

@@ -2,8 +2,13 @@ task :default => [:compile, :docs]
   
 desc "recompile"
 task :compile do
-  system "coffee -clo compiled src/jquery.expand.coffee"
+  system "coffee -co compiled src/jquery.expand.coffee"
   system "closure --compilation_level SIMPLE_OPTIMIZATIONS < compiled/jquery.expand.js > compiled/jquery.expand.min.js"
+end
+
+desc "relint"
+task :lint do
+  system "coffee -l src/jquery.expand.coffee"
 end
 
 desc "generate documentation"
