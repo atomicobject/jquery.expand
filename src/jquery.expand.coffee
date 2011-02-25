@@ -49,7 +49,12 @@
   $.fn.expand = (directive) ->
     element = 
       if this[0].nodeName == "SCRIPT" 
-        $(this.html())
+        $this = $(this)
+        node = $this.data("expand-node")
+        if !node
+          node = $(this.html())
+          $this.data("expand-node", node)
+        node.clone(true)
       else
         this.
           eq(0).

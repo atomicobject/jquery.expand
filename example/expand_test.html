@@ -1,7 +1,7 @@
 <html>
   <head>
     <script src="./jquery.js" type="text/javascript"></script>
-    <script src="../compiled/jquery.expand.js" type="text/javascript"></script>
+    <script src="../compiled/jquery.expand.min.js" type="text/javascript"></script>
   </head>
   <body>
     <ul id="results">
@@ -40,6 +40,7 @@
         results.append($("#warehouse .false").expand({name: "false", not: false}));
         results.append($("#warehouse .array").expand({name: "zero", result: [0, "K"]}));
         results.append($("#scriptTemplate").expand({name: "script", result: "OK"}));
+        results.append($("#scriptTemplate").expand({name: "script", result: "OK2"}));
 
         results.append(baseTempl.clone().attr("id", "inPlace"))
         $("#inPlace").expandInPlace({name: "In place", result: "OK"});

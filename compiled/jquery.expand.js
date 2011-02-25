@@ -3,8 +3,8 @@
   (function($) {
     var expandTemplateInPlace;
     $.fn.expand = function(directive) {
-      var element;
-      element = this[0].nodeName === "SCRIPT" ? $(this.html()) : this.eq(0).clone(true).removeAttr("id");
+      var $this, element, node;
+      element = this[0].nodeName === "SCRIPT" ? ($this = $(this), node = $this.data("expand-node"), !node ? (node = $(this.html()), $this.data("expand-node", node)) : void 0, node.clone(true)) : this.eq(0).clone(true).removeAttr("id");
       expandTemplateInPlace(element, directive);
       return element;
     };

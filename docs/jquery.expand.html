@@ -51,7 +51,12 @@ are provided through different key syntaxes.</p>             </td>             <
   <span class="nv">$.fn.expand = </span><span class="nf">(directive) -&gt;</span>
     <span class="nv">element = </span>
       <span class="k">if</span> <span class="k">this</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">nodeName</span> <span class="o">==</span> <span class="s2">&quot;SCRIPT&quot;</span> 
-        <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">html</span><span class="p">())</span>
+        <span class="nv">$this = </span><span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">)</span>
+        <span class="nv">node = </span><span class="nx">$this</span><span class="p">.</span><span class="nx">data</span><span class="p">(</span><span class="s2">&quot;expand-node&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="o">!</span><span class="nx">node</span>
+          <span class="nv">node = </span><span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">html</span><span class="p">())</span>
+          <span class="nx">$this</span><span class="p">.</span><span class="nx">data</span><span class="p">(</span><span class="s2">&quot;expand-node&quot;</span><span class="p">,</span> <span class="nx">node</span><span class="p">)</span>
+        <span class="nx">node</span><span class="p">.</span><span class="nx">clone</span><span class="p">(</span><span class="kc">true</span><span class="p">)</span>
       <span class="k">else</span>
         <span class="k">this</span><span class="p">.</span>
           <span class="nx">eq</span><span class="p">(</span><span class="mi">0</span><span class="p">).</span>
