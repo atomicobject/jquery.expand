@@ -13,6 +13,7 @@
       <li class="addClass"><span class="name"></span> <span class="result">OK</span></li>
       <li class="array"><span class="name"></span> <span class="result"><span></span></span></li>
       <li class="false"><span class="name"></span> <span class="not">NOT</span> <span class="result">OK<span></span></span></li>
+      <li class="checkbox"><span class="name"></span> <input type="checkbox" class="result"></li>
     </ul>
 
     <script id="scriptTemplate" type="text/html">
@@ -31,9 +32,10 @@
         results.append(baseTempl.expand({name: "html", result: { "html()": "OK"}}));
         results.append(baseTempl.expand({name: "text", result: { "text()": "OK"}}));
         results.append($("#warehouse .addClass").expand({name: "addClass", result: { "addClass()": "classy" }}));
-        results.append(baseTempl.expand({name: "function", result: function(el){ el.html("OK") }}));
         results.append($("#warehouse .array").expand({name: "array", result: ["O", "K"]}));
         results.append($("#warehouse .attributes").expand({name: "attributes", result: { "@data-okayed": "yes"}}));
+        results.append(baseTempl.expand({name: "function of element", result: function(el){ el.html("OK") }}));
+        results.append(baseTempl.expand({name: "function using this", result: function(el){ this.html("OK") }}));
         results.append(baseTempl.expand({name: "function returning object", result: function(el){ return {"html()": "OK"}}}));
         results.append(baseTempl.expand({name: "function returning object with function", result: function(el){ return {"html()": function(){ return "OK" }}}}));
         results.append(baseTempl.expand($.expand.compose({name: "compose"}, function(e){ e.find(".result").html("OK") })));
@@ -41,6 +43,8 @@
         results.append($("#warehouse .array").expand({name: "zero", result: [0, "K"]}));
         results.append($("#scriptTemplate").expand({name: "script", result: "OK"}));
         results.append($("#scriptTemplate").expand({name: "script", result: "OK2"}));
+        results.append($("#warehouse .array").expand({name: ". expansion", result: {".": ["O", "K"]}}));
+        results.append($("#warehouse .checkbox").expand({name: ":property", result: {":checked": true}}));
 
         results.append(baseTempl.clone().attr("id", "inPlace"))
         $("#inPlace").expandInPlace({name: "In place", result: "OK"});

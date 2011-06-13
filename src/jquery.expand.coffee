@@ -31,7 +31,7 @@
 #
 # After executing, the variable `myAdr` has a reference to a new, jQuery-wrapped
 # DOM node that is not attached to the DOM. You can then manipulate myAdr if desired,
-# or add it directly. The resulting node has markup like this:
+# or add it directly to the body. In this case, the resulting node has markup like this:
 # 
 #     <div class="adr">
 #       <div class="street-address">941 Wealthy St SE</div>
@@ -41,9 +41,12 @@
 #       <span class="postal-code">49506</span>
 #     </div>
 #
-# This simple example is just the tip of the iceberg. The templating "language" spans
-# the entire tower of types provide by JSON, and powerful mechanisms for manipulating
-# are provided through different key syntaxes.
+# The value passed to `expand` is called a directive. Directives are Javascript objects
+# which are crawled recursively to mutate the pattern DOM node. Most native Javascript types
+# are supported as directives, and the interplay between the different types is both
+# powerful and nuanced. In most cases, the meaning of a type is what intuitively makes sense,
+# and using expand is pretty natural once you get used to thinking analogously about the DOM
+# and JSON (actually JavaScript) directives.
 (($) ->
 
   $.fn.expand = (directive) ->
@@ -54,11 +57,9 @@
         if !node
           node = $(this.html())
           $this.data("expand-node", node)
-        node.clone(true)
+        $(node[0].cloneNode(true))
       else
-        this.
-          eq(0).
-          clone(true).
+        $(this[0].cloneNode(true)).
           removeAttr("id")
 
     expandTemplateInPlace(element, directive)
@@ -91,9 +92,11 @@
     # it in one of two ways.
     #
     # The first option is to simply mutate the element in place. At the point
-    # at which directive happens, the element is detached from the DOM and so
+    # at which the directive is applied, the element is detached from the DOM and so
     # can be mutated efficiently. The function can change the element or remove
-    # it and it will have the desired effect.
+    # it and it will have the desired effect. The invocation also binds the jquery
+    # object to `this` so either normal functions of one argument or jquery.fn- and
+    # event handler-style functions can be used.
     #
     # The second option is to return a new directive. Expand recurses on the
     # return value of the function. In this way, a null or undefined return
@@ -102,16 +105,16 @@
     # element to be removed.
 
     else if $.isFunction directive
-      return expandTemplateInPlace element, directive(element)
+      return expandTemplateInPlace element, directive.call(element, element)
 
 
     # Arrays
     # ------------------
     #
-    # Arrays are a little tricky, but matches up very well with HTML once
-    # you're used to it. When the directive is an array, the first child of the
+    # Arrays are a little tricky, but match up very well with HTML once
+    # you're used to them. When the directive is an array, the first child of the
     # element is cloned once for each element of the array, and the array
-    # element is used as a directive with witch to expand the cloned element. For
+    # element is used as a directive with which to expand the cloned element. For
     # example, if your template is
     #
     #     <ul>
@@ -132,15 +135,16 @@
       fragment = document.createDocumentFragment()
       if childTemplate
         for matchDirective in directive
-          expanded = expandTemplateInPlace $(childTemplate).clone(true), matchDirective
-          fragment.appendChild expanded
+          expanded = $(childTemplate.cloneNode(true))
+          fragment.appendChild expanded[0]
+          expandTemplateInPlace expanded, matchDirective
       element.html fragment
 
     # Objects
     # ------------------
     #
     # Object directives are a lot like arrays in that they represent a
-    # combination of simpler directives to perform on the element. Just as an
+    # combination of simpler directives to perform on children of an element. Just as an
     # object's properties are the constituent elements defining the object, an
     # directive object's properties are the constituent elements of the
     # directive to be performed. 
@@ -190,14 +194,12 @@
       for own propertyName, property of directive
         for own _, rule of syntax
           result = rule.call element, propertyName, property
-          expandTemplateInPlace $(result.expand), result.withDirective if result && typeof(result) == "object"
           break if result != false
 
     element[0]
 
   $.expand =
     KEY_SYNTAX:
-
       # ### Attributes
       # 
       # An `@` prefix on a property name causes an attribute to be set on the
@@ -212,6 +214,20 @@
         match = /^@([\w-]+)$/.exec(propertyName)
         return false unless match
         this.attr(match[1], analog)
+        return null
+
+      # ### Properties
+      # 
+      # An `.` prefix on a property name causes a property to be set on the
+      # element. For example
+      #
+      # `{":checked": true}`
+      #
+      # will have the checked property set on the corresponding element.      
+      ":properties": (propertyName, analog) ->
+        match = /^:([\w-]+)$/.exec(propertyName)
+        return false unless match
+        this.prop(match[1], analog)
         return null
 
       # ### Function properties
@@ -234,6 +250,13 @@
         return false unless match
         this[match[1]].call(this, analog)
         return null
+
+      "directive composition": (propertyName, analog) ->
+        if propertyName == "."
+          expandTemplateInPlace(this, analog)
+          return null
+        else
+          false
 
 
       # ### Arbitrary selectors

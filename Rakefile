@@ -13,7 +13,7 @@ end
 
 desc "generate documentation"
 task :docs do
-  system "docco src/*.coffee"
+  system "rocco src/*.coffee"
 end
 
 desc "update github pages"

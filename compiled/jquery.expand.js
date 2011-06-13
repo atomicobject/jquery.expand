@@ -4,7 +4,7 @@
     var expandTemplateInPlace;
     $.fn.expand = function(directive) {
       var $this, element, node;
-      element = this[0].nodeName === "SCRIPT" ? ($this = $(this), node = $this.data("expand-node"), !node ? (node = $(this.html()), $this.data("expand-node", node)) : void 0, node.clone(true)) : this.eq(0).clone(true).removeAttr("id");
+      element = this[0].nodeName === "SCRIPT" ? ($this = $(this), node = $this.data("expand-node"), !node ? (node = $(this.html()), $this.data("expand-node", node)) : void 0, $(node[0].cloneNode(true))) : $(this[0].cloneNode(true)).removeAttr("id");
       expandTemplateInPlace(element, directive);
       return element;
     };
@@ -18,15 +18,16 @@
       } else if (((_ref = typeof directive) === "number" || _ref === "string") || directive instanceof jQuery) {
         element.html(directive);
       } else if ($.isFunction(directive)) {
-        return expandTemplateInPlace(element, directive(element));
+        return expandTemplateInPlace(element, directive.call(element, element));
       } else if (directive.constructor === Array) {
         childTemplate = element.children()[0];
         fragment = document.createDocumentFragment();
         if (childTemplate) {
           for (_i = 0, _len = directive.length; _i < _len; _i++) {
             matchDirective = directive[_i];
-            expanded = expandTemplateInPlace($(childTemplate).clone(true), matchDirective);
-            fragment.appendChild(expanded);
+            expanded = $(childTemplate.cloneNode(true));
+            fragment.appendChild(expanded[0]);
+            expandTemplateInPlace(expanded, matchDirective);
           }
         }
         element.html(fragment);
@@ -39,9 +40,6 @@
             if (!__hasProp.call(syntax, _)) continue;
             rule = syntax[_];
             result = rule.call(element, propertyName, property);
-            if (result && typeof result === "object") {
-              expandTemplateInPlace($(result.expand), result.withDirective);
-            }
             if (result !== false) {
               break;
             }
@@ -61,6 +59,15 @@
           this.attr(match[1], analog);
           return null;
         },
+        ":properties": function(propertyName, analog) {
+          var match;
+          match = /^:([\w-]+)$/.exec(propertyName);
+          if (!match) {
+            return false;
+          }
+          this.prop(match[1], analog);
+          return null;
+        },
         "fn()": function(propertyName, analog) {
           var match;
           match = /^(\w+)\(\)$/.exec(propertyName);
@@ -69,6 +76,14 @@
           }
           this[match[1]].call(this, analog);
           return null;
+        },
+        "directive composition": function(propertyName, analog) {
+          if (propertyName === ".") {
+            expandTemplateInPlace(this, analog);
+            return null;
+          } else {
+            return false;
+          }
         },
         "class or css selector": function(propertyName, analog) {
           var directive, match, matches, _i, _len;
