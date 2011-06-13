@@ -33,7 +33,7 @@ wherever you want.</p>
 
 <p>After executing, the variable <code>myAdr</code> has a reference to a new, jQuery-wrapped
 DOM node that is not attached to the DOM. You can then manipulate myAdr if desired,
-or add it directly. The resulting node has markup like this:</p>
+or add it directly to the body. In this case, the resulting node has markup like this:</p>
 
 <pre><code>&lt;div class="adr"&gt;
   &lt;div class="street-address"&gt;941 Wealthy St SE&lt;/div&gt;
@@ -44,9 +44,12 @@ or add it directly. The resulting node has markup like this:</p>
 &lt;/div&gt;
 </code></pre>
 
-<p>This simple example is just the tip of the iceberg. The templating "language" spans
-the entire tower of types provide by JSON, and powerful mechanisms for manipulating
-are provided through different key syntaxes.</p>             </td>             <td class="code">               <div class="highlight"><pre><span class="p">(</span><span class="nf">($) -&gt;</span>
+<p>The value passed to <code>expand</code> is called a directive. Directives are Javascript objects
+which are crawled recursively to mutate the pattern DOM node. Most native Javascript types
+are supported as directives, and the interplay between the different types is both
+powerful and nuanced. In most cases, the meaning of a type is what intuitively makes sense,
+and using expand is pretty natural once you get used to thinking analogously about the DOM
+and JSON (actually JavaScript) directives.</p>             </td>             <td class="code">               <div class="highlight"><pre><span class="p">(</span><span class="nf">($) -&gt;</span>
 
   <span class="nv">$.fn.expand = </span><span class="nf">(directive) -&gt;</span>
     <span class="nv">element = </span>
@@ -75,21 +78,23 @@ in a jQuery object) that will be included in the output, and can affect
 it in one of two ways.</p>
 
 <p>The first option is to simply mutate the element in place. At the point
-at which directive happens, the element is detached from the DOM and so
+at which the directive is applied, the element is detached from the DOM and so
 can be mutated efficiently. The function can change the element or remove
-it and it will have the desired effect.</p>
+it and it will have the desired effect. The invocation also binds the jquery
+object to <code>this</code> so either normal functions of one argument or jquery.fn- and
+event handler-style functions can be used.</p>
 
 <p>The second option is to return a new directive. Expand recurses on the
 return value of the function. In this way, a null or undefined return
 value has no effect, but there's a lot of power here. You can use a
 predicate function as a directive, and a false return value will cause the
 element to be removed.</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="k">else</span> <span class="k">if</span> <span class="nx">$</span><span class="p">.</span><span class="nx">isFunction</span> <span class="nx">directive</span>
-      <span class="k">return</span> <span class="nx">expandTemplateInPlace</span> <span class="nx">element</span><span class="p">,</span> <span class="nx">directive</span><span class="p">(</span><span class="nx">element</span><span class="p">)</span></pre></div>             </td>           </tr>                               <tr id="section-7">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-7">&#182;</a>               </div>               <h2>Arrays</h2>
+      <span class="k">return</span> <span class="nx">expandTemplateInPlace</span> <span class="nx">element</span><span class="p">,</span> <span class="nx">directive</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">element</span><span class="p">,</span> <span class="nx">element</span><span class="p">)</span></pre></div>             </td>           </tr>                               <tr id="section-7">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-7">&#182;</a>               </div>               <h2>Arrays</h2>
 
-<p>Arrays are a little tricky, but matches up very well with HTML once
-you're used to it. When the directive is an array, the first child of the
+<p>Arrays are a little tricky, but match up very well with HTML once
+you're used to them. When the directive is an array, the first child of the
 element is cloned once for each element of the array, and the array
-element is used as a directive with witch to expand the cloned element. For
+element is used as a directive with which to expand the cloned element. For
 example, if your template is</p>
 
 <pre><code>&lt;ul&gt;
@@ -110,12 +115,13 @@ result is</p>
       <span class="nv">fragment = </span><span class="nb">document</span><span class="p">.</span><span class="nx">createDocumentFragment</span><span class="p">()</span>
       <span class="k">if</span> <span class="nx">childTemplate</span>
         <span class="k">for</span> <span class="nx">matchDirective</span> <span class="k">in</span> <span class="nx">directive</span>
-          <span class="nv">expanded = </span><span class="nx">expandTemplateInPlace</span> <span class="nx">$</span><span class="p">(</span><span class="nx">childTemplate</span><span class="p">).</span><span class="nx">clone</span><span class="p">(</span><span class="kc">true</span><span class="p">),</span> <span class="nx">matchDirective</span>
-          <span class="nx">fragment</span><span class="p">.</span><span class="nx">appendChild</span> <span class="nx">expanded</span>
+          <span class="nv">expanded = </span><span class="nx">$</span><span class="p">(</span><span class="nx">childTemplate</span><span class="p">).</span><span class="nx">clone</span><span class="p">(</span><span class="kc">true</span><span class="p">)</span>
+          <span class="nx">fragment</span><span class="p">.</span><span class="nx">appendChild</span> <span class="nx">expanded</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+          <span class="nx">expandTemplateInPlace</span> <span class="nx">expanded</span><span class="p">,</span> <span class="nx">matchDirective</span>
       <span class="nx">element</span><span class="p">.</span><span class="nx">html</span> <span class="nx">fragment</span></pre></div>             </td>           </tr>                               <tr id="section-8">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-8">&#182;</a>               </div>               <h2>Objects</h2>
 
 <p>Object directives are a lot like arrays in that they represent a
-combination of simpler directives to perform on the element. Just as an
+combination of simpler directives to perform on children of an element. Just as an
 object's properties are the constituent elements defining the object, an
 directive object's properties are the constituent elements of the
 directive to be performed. </p>
