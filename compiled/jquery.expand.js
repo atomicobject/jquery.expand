@@ -9,7 +9,7 @@
       return element;
     };
     expandTemplateInPlace = function(element, directive) {
-      var childTemplate, expanded, fragment, matchDirective, property, propertyName, result, rule, syntax, _, _i, _len, _ref;
+      var childTemplate, fragment, jq, matchDirective, node, property, propertyName, result, rule, syntax, _, _i, _len, _ref;
       if (directive === null || directive === void 0 || directive === true) {
         return element[0];
       }
@@ -22,24 +22,27 @@
       } else if (directive.constructor === Array) {
         childTemplate = element.children()[0];
         fragment = document.createDocumentFragment();
+        jq = $([1]);
         if (childTemplate) {
           for (_i = 0, _len = directive.length; _i < _len; _i++) {
             matchDirective = directive[_i];
-            expanded = $(childTemplate.cloneNode(true));
-            fragment.appendChild(expanded[0]);
-            expandTemplateInPlace(expanded, matchDirective);
+            node = childTemplate.cloneNode(true);
+            fragment.appendChild(node);
+            jq[0] = node;
+            expandTemplateInPlace(jq, matchDirective);
           }
         }
         element.html(fragment);
       } else if (typeof directive === 'object') {
         syntax = $.expand.KEY_SYNTAX;
+        jq = $([1]);
         for (propertyName in directive) {
           if (!__hasProp.call(directive, propertyName)) continue;
           property = directive[propertyName];
           for (_ in syntax) {
             if (!__hasProp.call(syntax, _)) continue;
             rule = syntax[_];
-            result = rule.call(element, propertyName, property);
+            result = rule.call(element, propertyName, property, jq);
             if (result !== false) {
               break;
             }
@@ -85,13 +88,14 @@
             return false;
           }
         },
-        "class or css selector": function(propertyName, analog) {
+        "class or css selector": function(propertyName, analog, jq) {
           var directive, match, matches, _i, _len;
           directive = propertyName.charAt(0) === "$" ? propertyName.slice(1, propertyName.length) : "." + propertyName;
           matches = this.find(directive);
           for (_i = 0, _len = matches.length; _i < _len; _i++) {
             match = matches[_i];
-            expandTemplateInPlace($(match), analog);
+            jq[0] = match;
+            expandTemplateInPlace(jq, analog);
           }
           return null;
         }

@@ -203,11 +203,13 @@ result is</p>
         <div class='highlight'><pre>    <span class="k">else</span> <span class="k">if</span> <span class="nx">directive</span><span class="p">.</span><span class="nx">constructor</span> <span class="o">==</span> <span class="nb">Array</span>
       <span class="nv">childTemplate = </span><span class="nx">element</span><span class="p">.</span><span class="nx">children</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
       <span class="nv">fragment = </span><span class="nb">document</span><span class="p">.</span><span class="nx">createDocumentFragment</span><span class="p">()</span>
+      <span class="nv">jq = </span><span class="nx">$</span><span class="p">([</span><span class="mi">1</span><span class="p">])</span>
       <span class="k">if</span> <span class="nx">childTemplate</span>
         <span class="k">for</span> <span class="nx">matchDirective</span> <span class="k">in</span> <span class="nx">directive</span>
-          <span class="nv">expanded = </span><span class="nx">$</span><span class="p">(</span><span class="nx">childTemplate</span><span class="p">.</span><span class="nx">cloneNode</span><span class="p">(</span><span class="kc">true</span><span class="p">))</span>
-          <span class="nx">fragment</span><span class="p">.</span><span class="nx">appendChild</span> <span class="nx">expanded</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-          <span class="nx">expandTemplateInPlace</span> <span class="nx">expanded</span><span class="p">,</span> <span class="nx">matchDirective</span>
+          <span class="nv">node = </span><span class="nx">childTemplate</span><span class="p">.</span><span class="nx">cloneNode</span><span class="p">(</span><span class="kc">true</span><span class="p">)</span>
+          <span class="nx">fragment</span><span class="p">.</span><span class="nx">appendChild</span> <span class="nx">node</span>
+          <span class="nx">jq</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="nx">node</span>
+          <span class="nx">expandTemplateInPlace</span> <span class="nx">jq</span><span class="p">,</span> <span class="nx">matchDirective</span>
       <span class="nx">element</span><span class="p">.</span><span class="nx">html</span> <span class="nx">fragment</span></pre></div>
       </td>
     </tr>
@@ -269,9 +271,10 @@ with class &ldquo;bar&rdquo; that are not within a &ldquo;foo&rdquo; will not be
       <td class=code>
         <div class='highlight'><pre>    <span class="k">else</span> <span class="k">if</span> <span class="k">typeof</span><span class="p">(</span><span class="nx">directive</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;object&#39;</span>
       <span class="nv">syntax = </span><span class="nx">$</span><span class="p">.</span><span class="nx">expand</span><span class="p">.</span><span class="nx">KEY_SYNTAX</span>
+      <span class="nv">jq = </span><span class="nx">$</span><span class="p">([</span><span class="mi">1</span><span class="p">])</span>
       <span class="k">for</span> <span class="nx">own</span> <span class="nx">propertyName</span><span class="p">,</span> <span class="nx">property</span> <span class="k">of</span> <span class="nx">directive</span>
         <span class="k">for</span> <span class="nx">own</span> <span class="nx">_</span><span class="p">,</span> <span class="nx">rule</span> <span class="k">of</span> <span class="nx">syntax</span>
-          <span class="nv">result = </span><span class="nx">rule</span><span class="p">.</span><span class="nx">call</span> <span class="nx">element</span><span class="p">,</span> <span class="nx">propertyName</span><span class="p">,</span> <span class="nx">property</span>
+          <span class="nv">result = </span><span class="nx">rule</span><span class="p">.</span><span class="nx">call</span> <span class="nx">element</span><span class="p">,</span> <span class="nx">propertyName</span><span class="p">,</span> <span class="nx">property</span><span class="p">,</span> <span class="nx">jq</span>
           <span class="k">break</span> <span class="k">if</span> <span class="nx">result</span> <span class="o">!=</span> <span class="kc">false</span>
 
     <span class="nx">element</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -311,7 +314,7 @@ only take a string or numeric value.</p>
         </div>
         <h3>Properties</h3>
 
-<p>An <code>.</code> prefix on a property name causes a property to be set on the
+<p>An <code>:</code> prefix on a property name causes a property to be set on the
 element. For example</p>
 
 <p><code>{":checked": true}</code></p>
@@ -381,14 +384,16 @@ to be used as an arbitrary css selector. For example,</p>
 </ul>
       </td>
       <td class=code>
-        <div class='highlight'><pre>      <span class="s2">&quot;class or css selector&quot;</span><span class="o">:</span> <span class="nf">(propertyName, analog) -&gt;</span>
+        <div class='highlight'><pre>      <span class="s2">&quot;class or css selector&quot;</span><span class="o">:</span> <span class="nf">(propertyName, analog, jq) -&gt;</span>
         <span class="nv">directive =</span>
           <span class="k">if</span> <span class="nx">propertyName</span><span class="p">.</span><span class="nx">charAt</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;$&quot;</span>
             <span class="nx">propertyName</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nx">propertyName</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span>
           <span class="k">else</span>
             <span class="s2">&quot;.&quot;</span> <span class="o">+</span> <span class="nx">propertyName</span>
         <span class="nv">matches = </span><span class="k">this</span><span class="p">.</span><span class="nx">find</span> <span class="nx">directive</span>
-        <span class="nx">expandTemplateInPlace</span> <span class="nx">$</span><span class="p">(</span><span class="nx">match</span><span class="p">),</span> <span class="nx">analog</span> <span class="k">for</span> <span class="nx">match</span> <span class="k">in</span> <span class="nx">matches</span>
+        <span class="k">for</span> <span class="nx">match</span> <span class="k">in</span> <span class="nx">matches</span>
+          <span class="nx">jq</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="nx">match</span>
+          <span class="nx">expandTemplateInPlace</span> <span class="nx">jq</span><span class="p">,</span> <span class="nx">analog</span> 
         <span class="k">return</span> <span class="kc">null</span></pre></div>
       </td>
     </tr>

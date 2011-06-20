@@ -133,11 +133,13 @@
     else if directive.constructor == Array
       childTemplate = element.children()[0]
       fragment = document.createDocumentFragment()
+      jq = $([1])
       if childTemplate
         for matchDirective in directive
-          expanded = $(childTemplate.cloneNode(true))
-          fragment.appendChild expanded[0]
-          expandTemplateInPlace expanded, matchDirective
+          node = childTemplate.cloneNode(true)
+          fragment.appendChild node
+          jq[0] = node
+          expandTemplateInPlace jq, matchDirective
       element.html fragment
 
     # Objects
@@ -191,9 +193,10 @@
 
     else if typeof(directive) == 'object'
       syntax = $.expand.KEY_SYNTAX
+      jq = $([1])
       for own propertyName, property of directive
         for own _, rule of syntax
-          result = rule.call element, propertyName, property
+          result = rule.call element, propertyName, property, jq
           break if result != false
 
     element[0]
@@ -218,7 +221,7 @@
 
       # ### Properties
       # 
-      # An `.` prefix on a property name causes a property to be set on the
+      # An `:` prefix on a property name causes a property to be set on the
       # element. For example
       #
       # `{":checked": true}`
@@ -269,14 +272,16 @@
       # * `{'$a[title]': function(el){ el.append(" (" + el.attr("title") + ")"); }}` will add a parenthetical explanation to the text of each link with a title attribute.
       # * `{'$:text': {"val()": "foo"}}` will set the text of all text inputs/textareas to "foo".
 
-      "class or css selector": (propertyName, analog) ->
+      "class or css selector": (propertyName, analog, jq) ->
         directive =
           if propertyName.charAt(0) == "$"
             propertyName.slice(1, propertyName.length)
           else
             "." + propertyName
         matches = this.find directive
-        expandTemplateInPlace $(match), analog for match in matches
+        for match in matches
+          jq[0] = match
+          expandTemplateInPlace jq, analog 
         return null
 
     # Composition 
