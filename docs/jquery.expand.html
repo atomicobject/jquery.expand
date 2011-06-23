@@ -369,8 +369,12 @@ directives, or to set attributes and expand contents with an array simultaneousl
 
 <p>For example:</p>
 
-<p><code>$("#mylist").expand({"addClass()": "emphasized", ".": someArray})</code> will add the
-<code>emphasized</code> class to <code>#mylist</code> and expand the first child repeatedly for each entry
+<pre><code>$("#mylist").expand({
+  "addClass()": "emphasized", 
+  ".": someArray})
+</code></pre>
+
+<p>will add the <code>emphasized</code> class to <code>#mylist</code> and expand the first child repeatedly for each entry
 in someArray.</p>
       </td>
       <td class=code>

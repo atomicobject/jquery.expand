@@ -262,8 +262,11 @@ KEY_SYNTAX = [
   #
   # For example:
   #
-  # `$("#mylist").expand({"addClass()": "emphasized", ".": someArray})` will add the
-  # `emphasized` class to `#mylist` and expand the first child repeatedly for each entry
+  #     $("#mylist").expand({
+  #       "addClass()": "emphasized", 
+  #       ".": someArray})
+  #
+  # will add the `emphasized` class to `#mylist` and expand the first child repeatedly for each entry
   # in someArray.
 
   (propertyName, analog) ->
