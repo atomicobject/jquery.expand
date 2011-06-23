@@ -1,0 +1,13 @@
+GEM
+  specs:
+    mustache (0.99.4)
+    rdiscount (1.6.8)
+    rocco (0.7)
+      mustache
+      rdiscount
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  rocco

@@ -1,4 +1,27 @@
-<!DOCTYPE html>  <html> <head>   <title>jquery.expand.coffee</title>   <meta http-equiv="content-type" content="text/html; charset=UTF-8">   <link rel="stylesheet" media="all" href="docco.css" /> </head> <body>   <div id="container">     <div id="background"></div>          <table cellpadding="0" cellspacing="0">       <thead>         <tr>           <th class="docs">             <h1>               jquery.expand.coffee             </h1>           </th>           <th class="code">           </th>         </tr>       </thead>       <tbody>                               <tr id="section-1">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-1">&#182;</a>               </div>               <p><em>jquery.expand</em> is a templating plugin for jquery.</p>
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <title>jquery.expand.coffee</title>
+  <link rel="stylesheet" href="http://jashkenas.github.com/docco/resources/docco.css">
+</head>
+<body>
+<div id='container'>
+  <div id="background"></div>
+  <table cellspacing=0 cellpadding=0>
+  <thead>
+    <tr>
+      <th class=docs><h1>jquery.expand.coffee</h1></th>
+      <th class=code></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr id='section-1'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-1">&#182;</a>
+        </div>
+        <p><em>jquery.expand</em> is a templating plugin for jquery.</p>
 
 <p><em>expand</em> tries to be to templating what CSS is to styling. Templating is unobtrusive.
 In fact, templates are just normal DOM nodes. Transformations on the templates
@@ -8,7 +31,7 @@ are specified via a powerful JSON DSL.</p>
 detached DOM node (wrapped in a jquery object) to be inserted back in the dom
 wherever you want.</p>
 
-<p>Let's start with a simple example</p>
+<p>Let&rsquo;s start with a simple example</p>
 
 <pre><code>&lt;div id="adr-template" class="adr"&gt;
   &lt;div class="street-address"&gt;&lt;/div&gt;
@@ -49,31 +72,84 @@ which are crawled recursively to mutate the pattern DOM node. Most native Javasc
 are supported as directives, and the interplay between the different types is both
 powerful and nuanced. In most cases, the meaning of a type is what intuitively makes sense,
 and using expand is pretty natural once you get used to thinking analogously about the DOM
-and JSON (actually JavaScript) directives.</p>             </td>             <td class="code">               <div class="highlight"><pre><span class="p">(</span><span class="nf">($) -&gt;</span>
+and JSON (actually JavaScript) directives.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre><span class="nv">$ = </span><span class="nx">jQuery</span>
 
-  <span class="nv">$.fn.expand = </span><span class="nf">(directive) -&gt;</span>
-    <span class="nv">element = </span>
-      <span class="k">if</span> <span class="k">this</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">nodeName</span> <span class="o">==</span> <span class="s2">&quot;SCRIPT&quot;</span> 
-        <span class="nv">$this = </span><span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">)</span>
-        <span class="nv">node = </span><span class="nx">$this</span><span class="p">.</span><span class="nx">data</span><span class="p">(</span><span class="s2">&quot;expand-node&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="o">!</span><span class="nx">node</span>
-          <span class="nv">node = </span><span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">html</span><span class="p">())</span>
-          <span class="nx">$this</span><span class="p">.</span><span class="nx">data</span><span class="p">(</span><span class="s2">&quot;expand-node&quot;</span><span class="p">,</span> <span class="nx">node</span><span class="p">)</span>
-        <span class="nx">node</span><span class="p">.</span><span class="nx">clone</span><span class="p">(</span><span class="kc">true</span><span class="p">)</span>
-      <span class="k">else</span>
-        <span class="k">this</span><span class="p">.</span>
-          <span class="nx">eq</span><span class="p">(</span><span class="mi">0</span><span class="p">).</span>
-          <span class="nx">clone</span><span class="p">(</span><span class="kc">true</span><span class="p">).</span>
-          <span class="nx">removeAttr</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">)</span>
+<span class="nv">$.fn.expand = </span><span class="nf">(directive) -&gt;</span>
+  <span class="nv">element = </span>
+    <span class="k">if</span> <span class="k">this</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">nodeName</span> <span class="o">==</span> <span class="s2">&quot;SCRIPT&quot;</span> 
+      <span class="nv">$this = </span><span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">)</span>
+      <span class="nv">node = </span><span class="nx">$this</span><span class="p">.</span><span class="nx">data</span><span class="p">(</span><span class="s2">&quot;expand-node&quot;</span><span class="p">)</span>
+      <span class="k">if</span> <span class="o">!</span><span class="nx">node</span>
+        <span class="nv">node = </span><span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">html</span><span class="p">())</span>
+        <span class="nx">$this</span><span class="p">.</span><span class="nx">data</span><span class="p">(</span><span class="s2">&quot;expand-node&quot;</span><span class="p">,</span> <span class="nx">node</span><span class="p">)</span>
+      <span class="nx">$</span><span class="p">(</span><span class="nx">node</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">cloneNode</span><span class="p">(</span><span class="kc">true</span><span class="p">))</span>
+    <span class="k">else</span>
+      <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">cloneNode</span><span class="p">(</span><span class="kc">true</span><span class="p">)).</span>
+        <span class="nx">removeAttr</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">)</span>
 
-    <span class="nx">expandTemplateInPlace</span><span class="p">(</span><span class="nx">element</span><span class="p">,</span> <span class="nx">directive</span><span class="p">)</span>
-    <span class="k">return</span> <span class="nx">element</span></pre></div>             </td>           </tr>                               <tr id="section-2">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-2">&#182;</a>               </div>               <h1>Types of Directives</h1>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nv">expandTemplateInPlace = </span><span class="nf">(element, directive) -&gt;</span></pre></div>             </td>           </tr>                               <tr id="section-3">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-3">&#182;</a>               </div>               <h2>Simple Directives</h2>
+  <span class="nx">expandTemplateInPlace</span><span class="p">(</span><span class="nx">element</span><span class="p">,</span> <span class="nx">directive</span><span class="p">)</span>
+  <span class="k">return</span> <span class="nx">element</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-Types_of_Directives'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-Types_of_Directives">&#182;</a>
+        </div>
+        <h1>Types of Directives</h1>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre><span class="nv">expandTemplateInPlace = </span><span class="nf">(element, directive) -&gt;</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-Simple_Directives'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-Simple_Directives">&#182;</a>
+        </div>
+        <h2>Simple Directives</h2>
 
-<p><code>null</code>, <code>undefined</code>, and <code>true</code> all cause the element to be left untouched.</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="k">return</span> <span class="nx">element</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="nx">directive</span> <span class="k">in</span> <span class="p">[</span><span class="kc">null</span><span class="p">,</span> <span class="kc">undefined</span><span class="p">,</span> <span class="kc">true</span><span class="p">]</span></pre></div>             </td>           </tr>                               <tr id="section-4">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-4">&#182;</a>               </div>               <p><code>false</code> causes the element to be removed.</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="k">if</span> <span class="nx">directive</span> <span class="o">==</span> <span class="kc">false</span>
-      <span class="nx">element</span><span class="p">.</span><span class="nx">remove</span><span class="p">()</span></pre></div>             </td>           </tr>                               <tr id="section-5">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-5">&#182;</a>               </div>               <p>numbers, strings, and jquery (dom) objects are set as the inner html of the element.</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="k">else</span> <span class="k">if</span> <span class="k">typeof</span><span class="p">(</span><span class="nx">directive</span><span class="p">)</span> <span class="k">in</span> <span class="p">[</span><span class="s2">&quot;number&quot;</span><span class="p">,</span> <span class="s2">&quot;string&quot;</span><span class="p">]</span> <span class="o">or</span> <span class="nx">directive</span> <span class="k">instanceof</span> <span class="nx">jQuery</span>
-      <span class="nx">element</span><span class="p">.</span><span class="nx">html</span> <span class="nx">directive</span></pre></div>             </td>           </tr>                               <tr id="section-6">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-6">&#182;</a>               </div>               <h2>Functions</h2>
+<p><code>null</code>, <code>undefined</code>, and <code>true</code> all cause the element to be left untouched.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>  <span class="k">return</span> <span class="nx">element</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="nx">directive</span> <span class="k">in</span> <span class="p">[</span><span class="kc">null</span><span class="p">,</span> <span class="kc">undefined</span><span class="p">,</span> <span class="kc">true</span><span class="p">]</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-4'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-4">&#182;</a>
+        </div>
+        <p><code>false</code> causes the element to be removed.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>  <span class="k">if</span> <span class="nx">directive</span> <span class="o">==</span> <span class="kc">false</span>
+    <span class="nx">element</span><span class="p">.</span><span class="nx">remove</span><span class="p">()</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-5'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-5">&#182;</a>
+        </div>
+        <p>numbers, strings, and jquery (dom) objects are set as the inner html of the element.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>  <span class="k">else</span> <span class="k">if</span> <span class="k">typeof</span><span class="p">(</span><span class="nx">directive</span><span class="p">)</span> <span class="k">in</span> <span class="p">[</span><span class="s2">&quot;number&quot;</span><span class="p">,</span> <span class="s2">&quot;string&quot;</span><span class="p">]</span> <span class="o">or</span> <span class="nx">directive</span> <span class="k">instanceof</span> <span class="nx">jQuery</span>
+    <span class="nx">element</span><span class="p">.</span><span class="nx">html</span> <span class="nx">directive</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-Functions'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-Functions">&#182;</a>
+        </div>
+        <h2>Functions</h2>
 
-<p>Functions are very powerful. They're passed the new HTML element (wrapped
+<p>Functions are very powerful. They&rsquo;re passed the new HTML element (wrapped
 in a jQuery object) that will be included in the output, and can affect
 it in one of two ways.</p>
 
@@ -86,13 +162,24 @@ event handler-style functions can be used.</p>
 
 <p>The second option is to return a new directive. Expand recurses on the
 return value of the function. In this way, a null or undefined return
-value has no effect, but there's a lot of power here. You can use a
+value has no effect, but there&rsquo;s a lot of power here. You can use a
 predicate function as a directive, and a false return value will cause the
-element to be removed.</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="k">else</span> <span class="k">if</span> <span class="nx">$</span><span class="p">.</span><span class="nx">isFunction</span> <span class="nx">directive</span>
-      <span class="k">return</span> <span class="nx">expandTemplateInPlace</span> <span class="nx">element</span><span class="p">,</span> <span class="nx">directive</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">element</span><span class="p">,</span> <span class="nx">element</span><span class="p">)</span></pre></div>             </td>           </tr>                               <tr id="section-7">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-7">&#182;</a>               </div>               <h2>Arrays</h2>
+element to be removed.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>  <span class="k">else</span> <span class="k">if</span> <span class="nx">$</span><span class="p">.</span><span class="nx">isFunction</span> <span class="nx">directive</span>
+    <span class="k">return</span> <span class="nx">expandTemplateInPlace</span> <span class="nx">element</span><span class="p">,</span> <span class="nx">directive</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">element</span><span class="p">,</span> <span class="nx">element</span><span class="p">)</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-Arrays'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-Arrays">&#182;</a>
+        </div>
+        <h2>Arrays</h2>
 
 <p>Arrays are a little tricky, but match up very well with HTML once
-you're used to them. When the directive is an array, the first child of the
+you&rsquo;re used to them. When the directive is an array, the first child of the
 element is cloned once for each element of the array, and the array
 element is used as a directive with which to expand the cloned element. For
 example, if your template is</p>
@@ -110,28 +197,41 @@ result is</p>
   &lt;li&gt;2&lt;/li&gt;
   &lt;li&gt;3&lt;/li&gt;
 &lt;/ul&gt;
-</code></pre>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="k">else</span> <span class="k">if</span> <span class="nx">directive</span><span class="p">.</span><span class="nx">constructor</span> <span class="o">==</span> <span class="nb">Array</span>
-      <span class="nv">childTemplate = </span><span class="nx">element</span><span class="p">.</span><span class="nx">children</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
-      <span class="nv">fragment = </span><span class="nb">document</span><span class="p">.</span><span class="nx">createDocumentFragment</span><span class="p">()</span>
-      <span class="k">if</span> <span class="nx">childTemplate</span>
-        <span class="k">for</span> <span class="nx">matchDirective</span> <span class="k">in</span> <span class="nx">directive</span>
-          <span class="nv">expanded = </span><span class="nx">$</span><span class="p">(</span><span class="nx">childTemplate</span><span class="p">).</span><span class="nx">clone</span><span class="p">(</span><span class="kc">true</span><span class="p">)</span>
-          <span class="nx">fragment</span><span class="p">.</span><span class="nx">appendChild</span> <span class="nx">expanded</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-          <span class="nx">expandTemplateInPlace</span> <span class="nx">expanded</span><span class="p">,</span> <span class="nx">matchDirective</span>
-      <span class="nx">element</span><span class="p">.</span><span class="nx">html</span> <span class="nx">fragment</span></pre></div>             </td>           </tr>                               <tr id="section-8">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-8">&#182;</a>               </div>               <h2>Objects</h2>
+</code></pre>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>  <span class="k">else</span> <span class="k">if</span> <span class="nx">directive</span><span class="p">.</span><span class="nx">constructor</span> <span class="o">==</span> <span class="nb">Array</span>
+    <span class="nv">childTemplate = </span><span class="nx">element</span><span class="p">.</span><span class="nx">children</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="nv">fragment = </span><span class="nb">document</span><span class="p">.</span><span class="nx">createDocumentFragment</span><span class="p">()</span>
+    <span class="nv">jq = </span><span class="nx">$</span><span class="p">([</span><span class="mi">1</span><span class="p">])</span>
+    <span class="k">if</span> <span class="nx">childTemplate</span>
+      <span class="k">for</span> <span class="nx">matchDirective</span> <span class="k">in</span> <span class="nx">directive</span>
+        <span class="nv">node = </span><span class="nx">childTemplate</span><span class="p">.</span><span class="nx">cloneNode</span><span class="p">(</span><span class="kc">true</span><span class="p">)</span>
+        <span class="nx">fragment</span><span class="p">.</span><span class="nx">appendChild</span> <span class="nx">node</span>
+        <span class="nx">jq</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="nx">node</span>
+        <span class="nx">expandTemplateInPlace</span> <span class="nx">jq</span><span class="p">,</span> <span class="nx">matchDirective</span>
+    <span class="nx">element</span><span class="p">.</span><span class="nx">html</span> <span class="nx">fragment</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-Objects'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-Objects">&#182;</a>
+        </div>
+        <h2>Objects</h2>
 
 <p>Object directives are a lot like arrays in that they represent a
 combination of simpler directives to perform on children of an element. Just as an
-object's properties are the constituent elements defining the object, an
-directive object's properties are the constituent elements of the
-directive to be performed. </p>
+object&rsquo;s properties are the constituent elements defining the object, an
+directive object&rsquo;s properties are the constituent elements of the
+directive to be performed.</p>
 
 <h3>Classes</h3>
 
-<p>The simplest type of object directive is what you'd normally see in a JSON
-object. Let's say you had an object called <code>name</code> defined by </p>
+<p>The simplest type of object directive is what you&rsquo;d normally see in a JSON
+object. Let&rsquo;s say you had an object called <code>name</code> defined by</p>
 
-<p><code>{ first_name: "John", last_name: "Smith" }</code> </p>
+<p><code>{ first_name: "John", last_name: "Smith" }</code></p>
 
 <p>returned by an AJAX call, and you want to populate a few elements on the
 page, with the template:</p>
@@ -157,27 +257,36 @@ assumes the property name is a class name and uses the value of the
 property as a directive to expand <em>every</em> element with that class within
 the surrounding context.</p>
 
-<p>To take things a step furthery, it's important to realize that these
+<p>To take things a step furthery, it&rsquo;s important to realize that these
 contexts stack.  If the value associated with a property is another
 object, that object is used to expand only the element(s) matched by the
 key. This is just like CSS selectors. A directive like</p>
 
 <p><code>{foo: {bar: "baz"}}</code></p>
 
-<p>Will cause all elements with class "bar" somewhere beneath an element
-with class "foo" to have their inner html set to "baz". However, elements
-with class "bar" that are not within a "foo" will not be affected.</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="k">else</span> <span class="k">if</span> <span class="k">typeof</span><span class="p">(</span><span class="nx">directive</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;object&#39;</span>
-      <span class="nv">syntax = </span><span class="nx">$</span><span class="p">.</span><span class="nx">expand</span><span class="p">.</span><span class="nx">KEY_SYNTAX</span>
-      <span class="k">for</span> <span class="nx">own</span> <span class="nx">propertyName</span><span class="p">,</span> <span class="nx">property</span> <span class="k">of</span> <span class="nx">directive</span>
-        <span class="k">for</span> <span class="nx">own</span> <span class="nx">_</span><span class="p">,</span> <span class="nx">rule</span> <span class="k">of</span> <span class="nx">syntax</span>
-          <span class="nv">result = </span><span class="nx">rule</span><span class="p">.</span><span class="nx">call</span> <span class="nx">element</span><span class="p">,</span> <span class="nx">propertyName</span><span class="p">,</span> <span class="nx">property</span>
-          <span class="nx">expandTemplateInPlace</span> <span class="nx">$</span><span class="p">(</span><span class="nx">result</span><span class="p">.</span><span class="nx">expand</span><span class="p">),</span> <span class="nx">result</span><span class="p">.</span><span class="nx">withDirective</span> <span class="k">if</span> <span class="nx">result</span> <span class="o">&amp;&amp;</span> <span class="k">typeof</span><span class="p">(</span><span class="nx">result</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;object&quot;</span>
-          <span class="k">break</span> <span class="k">if</span> <span class="nx">result</span> <span class="o">!=</span> <span class="kc">false</span>
+<p>Will cause all elements with class &ldquo;bar&rdquo; somewhere beneath an element
+with class &ldquo;foo&rdquo; to have their inner html set to &ldquo;baz&rdquo;. However, elements
+with class &ldquo;bar&rdquo; that are not within a &ldquo;foo&rdquo; will not be affected.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>  <span class="k">else</span> <span class="k">if</span> <span class="k">typeof</span><span class="p">(</span><span class="nx">directive</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;object&#39;</span>
+    <span class="nv">jq = </span><span class="nx">$</span><span class="p">([</span><span class="mi">1</span><span class="p">])</span>
+    <span class="k">for</span> <span class="nx">own</span> <span class="nx">propertyName</span><span class="p">,</span> <span class="nx">property</span> <span class="k">of</span> <span class="nx">directive</span>
+      <span class="k">for</span> <span class="nx">rule</span> <span class="k">in</span> <span class="nx">KEY_SYNTAX</span>
+        <span class="nv">result = </span><span class="nx">rule</span><span class="p">.</span><span class="nx">call</span> <span class="nx">element</span><span class="p">,</span> <span class="nx">propertyName</span><span class="p">,</span> <span class="nx">property</span><span class="p">,</span> <span class="nx">jq</span>
+        <span class="k">break</span> <span class="k">if</span> <span class="nx">result</span> <span class="o">!=</span> <span class="kc">false</span>
 
-    <span class="nx">element</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+  <span class="nx">element</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
-  <span class="nv">$.expand =</span>
-    <span class="nv">KEY_SYNTAX:</span></pre></div>             </td>           </tr>                               <tr id="section-9">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-9">&#182;</a>               </div>               <h3>Attributes</h3>
+<span class="nv">KEY_SYNTAX = </span><span class="p">[</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-Attributes'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-Attributes">&#182;</a>
+        </div>
+        <h3>Attributes</h3>
 
 <p>An <code>@</code> prefix on a property name causes an attribute to be set on the
 element. For example</p>
@@ -185,12 +294,45 @@ element. For example</p>
 <p><code>{"@href": "http://www.atomicobject.com"}</code></p>
 
 <p>will have the href attribute set on the corresponding element. This can
-only take a string or numeric value.</p>             </td>             <td class="code">               <div class="highlight"><pre>      
-      <span class="s2">&quot;@attributes&quot;</span><span class="o">:</span> <span class="nf">(propertyName, analog) -&gt;</span>
-        <span class="nv">match = </span><span class="sr">/^@([\w-]+)$/</span><span class="p">.</span><span class="nx">exec</span><span class="p">(</span><span class="nx">propertyName</span><span class="p">)</span>
-        <span class="k">return</span> <span class="kc">false</span> <span class="nx">unless</span> <span class="nx">match</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="nx">match</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="nx">analog</span><span class="p">)</span>
-        <span class="k">return</span> <span class="kc">null</span></pre></div>             </td>           </tr>                               <tr id="section-10">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-10">&#182;</a>               </div>               <h3>Function properties</h3>
+only take a string or numeric value.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>  <span class="nf">(propertyName, analog) -&gt;</span>
+    <span class="nv">match = </span><span class="sr">/^@([\w-]+)$/</span><span class="p">.</span><span class="nx">exec</span><span class="p">(</span><span class="nx">propertyName</span><span class="p">)</span>
+    <span class="k">return</span> <span class="kc">false</span> <span class="nx">unless</span> <span class="nx">match</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="nx">match</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="nx">analog</span><span class="p">)</span>
+    <span class="k">return</span> <span class="kc">null</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-Properties'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-Properties">&#182;</a>
+        </div>
+        <h3>Properties</h3>
+
+<p>An <code>:</code> prefix on a property name causes a property to be set on the
+element. For example</p>
+
+<p><code>{":checked": true}</code></p>
+
+<p>will have the checked property set on the corresponding element.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>  
+  <span class="nf">(propertyName, analog) -&gt;</span>
+    <span class="nv">match = </span><span class="sr">/^:([\w-]+)$/</span><span class="p">.</span><span class="nx">exec</span><span class="p">(</span><span class="nx">propertyName</span><span class="p">)</span>
+    <span class="k">return</span> <span class="kc">false</span> <span class="nx">unless</span> <span class="nx">match</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">prop</span><span class="p">(</span><span class="nx">match</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="nx">analog</span><span class="p">)</span>
+    <span class="k">return</span> <span class="kc">null</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-Function_properties'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-Function_properties">&#182;</a>
+        </div>
+        <h3>Function properties</h3>
 
 <p>A <code>()</code> suffix on a property name causes a function to be called on the
 corresponding jquery object. This is especially useful for adding or
@@ -201,33 +343,85 @@ property is passed as an argument.</p>
 
 <ul>
 <li><code>$("#foo").expand({"text()": "foo"})</code> will have inner text foo.</li>
-<li><code>$("#foo").expand({"val()": "foo"})</code> will have the form element's value set to "foo".</li>
-<li><code>$("#foo").expand({"addClass()": "foo"})</code> will have the class "foo" added.</li>
-<li><code>$("#foo").expand({"removeClass()": "foo"})</code> will have the class "foo" removed.</li>
-</ul>             </td>             <td class="code">               <div class="highlight"><pre>      
-      <span class="s2">&quot;fn()&quot;</span><span class="o">:</span> <span class="nf">(propertyName, analog) -&gt;</span>
-        <span class="nv">match = </span><span class="sr">/^(\w+)\(\)$/</span><span class="p">.</span><span class="nx">exec</span><span class="p">(</span><span class="nx">propertyName</span><span class="p">)</span>
-        <span class="k">return</span> <span class="kc">false</span> <span class="nx">unless</span> <span class="nx">match</span>
-        <span class="k">this</span><span class="p">[</span><span class="nx">match</span><span class="p">[</span><span class="mi">1</span><span class="p">]].</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">analog</span><span class="p">)</span>
-        <span class="k">return</span> <span class="kc">null</span></pre></div>             </td>           </tr>                               <tr id="section-11">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-11">&#182;</a>               </div>               <h3>Arbitrary selectors</h3>
+<li><code>$("#foo").expand({"val()": "foo"})</code> will have the form element&rsquo;s value set to &ldquo;foo&rdquo;.</li>
+<li><code>$("#foo").expand({"addClass()": "foo"})</code> will have the class &ldquo;foo&rdquo; added.</li>
+<li><code>$("#foo").expand({"removeClass()": "foo"})</code> will have the class &ldquo;foo&rdquo; removed.</li>
+</ul>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>  <span class="nf">(propertyName, analog) -&gt;</span>
+    <span class="nv">match = </span><span class="sr">/^(\w+)\(\)$/</span><span class="p">.</span><span class="nx">exec</span><span class="p">(</span><span class="nx">propertyName</span><span class="p">)</span>
+    <span class="k">return</span> <span class="kc">false</span> <span class="nx">unless</span> <span class="nx">match</span>
+    <span class="k">this</span><span class="p">[</span><span class="nx">match</span><span class="p">[</span><span class="mi">1</span><span class="p">]].</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">analog</span><span class="p">)</span>
+    <span class="k">return</span> <span class="kc">null</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-Composition'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-Composition">&#182;</a>
+        </div>
+        <h3>Composition</h3>
 
-<p><em>Expand</em> isn't limited to just selecting elements to expand by class
+<p>&ldquo;.&rdquo; as a property name causes expansion to be continued on the current element
+with the value. One use of this is to decorate a directive parameter with additional
+directives, or to set attributes and expand contents with an array simultaneously.</p>
+
+<p>For example:</p>
+
+<p><code>$("#mylist").expand({"addClass()": "emphasized", ".": someArray})</code> will add the
+<code>emphasized</code> class to <code>#mylist</code> and expand the first child repeatedly for each entry
+in someArray.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>  <span class="nf">(propertyName, analog) -&gt;</span>
+    <span class="k">if</span> <span class="nx">propertyName</span> <span class="o">==</span> <span class="s2">&quot;.&quot;</span>
+      <span class="nx">expandTemplateInPlace</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">analog</span><span class="p">)</span>
+      <span class="k">return</span> <span class="kc">null</span>
+    <span class="k">else</span>
+      <span class="kc">false</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-Arbitrary_selectors'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-Arbitrary_selectors">&#182;</a>
+        </div>
+        <h3>Arbitrary selectors</h3>
+
+<p><em>Expand</em> isn&rsquo;t limited to just selecting elements to expand by class
 names. A <code>$</code> prefix on property name will cause the rest of the name
-to be used as an arbitrary css selector. For example, </p>
+to be used as an arbitrary css selector. For example,</p>
 
 <ul>
-<li><code>{'$.bar, .baz': "asdf"}</code> will set the inner html of bar an baz elements to "asdf".</li>
+<li><code>{'$.bar, .baz': "asdf"}</code> will set the inner html of bar an baz elements to &ldquo;asdf&rdquo;.</li>
 <li><code>{'$a[title]': function(el){ el.append(" (" + el.attr("title") + ")"); }}</code> will add a parenthetical explanation to the text of each link with a title attribute.</li>
-<li><code>{'$:text': {"val()": "foo"}}</code> will set the text of all text inputs/textareas to "foo".</li>
-</ul>             </td>             <td class="code">               <div class="highlight"><pre>      <span class="s2">&quot;class or css selector&quot;</span><span class="o">:</span> <span class="nf">(propertyName, analog) -&gt;</span>
-        <span class="nv">directive =</span>
-          <span class="k">if</span> <span class="nx">propertyName</span><span class="p">.</span><span class="nx">charAt</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;$&quot;</span>
-            <span class="nx">propertyName</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nx">propertyName</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span>
-          <span class="k">else</span>
-            <span class="s2">&quot;.&quot;</span> <span class="o">+</span> <span class="nx">propertyName</span>
-        <span class="nv">matches = </span><span class="k">this</span><span class="p">.</span><span class="nx">find</span> <span class="nx">directive</span>
-        <span class="nx">expandTemplateInPlace</span> <span class="nx">$</span><span class="p">(</span><span class="nx">match</span><span class="p">),</span> <span class="nx">analog</span> <span class="k">for</span> <span class="nx">match</span> <span class="k">in</span> <span class="nx">matches</span>
-        <span class="k">return</span> <span class="kc">null</span></pre></div>             </td>           </tr>                               <tr id="section-12">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-12">&#182;</a>               </div>               <h2>Composition </h2>
+<li><code>{'$:text': {"val()": "foo"}}</code> will set the text of all text inputs/textareas to &ldquo;foo&rdquo;.</li>
+</ul>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>  <span class="nf">(propertyName, analog, jq) -&gt;</span>
+    <span class="nv">directive =</span>
+      <span class="k">if</span> <span class="nx">propertyName</span><span class="p">.</span><span class="nx">charAt</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;$&quot;</span>
+        <span class="nx">propertyName</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+      <span class="k">else</span>
+        <span class="s2">&quot;.&quot;</span> <span class="o">+</span> <span class="nx">propertyName</span>
+    <span class="nv">matches = </span><span class="k">this</span><span class="p">.</span><span class="nx">find</span> <span class="nx">directive</span>
+    <span class="k">for</span> <span class="nx">match</span> <span class="k">in</span> <span class="nx">matches</span>
+      <span class="nx">jq</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="nx">match</span>
+      <span class="nx">expandTemplateInPlace</span> <span class="nx">jq</span><span class="p">,</span> <span class="nx">analog</span> 
+    <span class="k">return</span> <span class="kc">null</span>
+<span class="p">]</span>
+
+<span class="nv">$.expand =</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-Composition'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-Composition">&#182;</a>
+        </div>
+        <h2>Composition </h2>
 
 <p>Expand comes with a rudimentary composition function.
 <code>$.expand.compose(directive1, directive2,...)</code> will return an object that can be used
@@ -235,23 +429,43 @@ as a directive which is equivalent to applying the argument directives
 in order.</p>
 
 <p>If all the directives are predicate functions, $.expand.compose is equivalent
-to an <code>&amp;&amp;</code> operation on the results of the functions.</p>             </td>             <td class="code">               <div class="highlight"><pre>    
-    <span class="nv">compose: </span><span class="nf">() -&gt;</span>
-      <span class="nv">directives = </span><span class="nx">arguments</span>
-      <span class="k">return</span> <span class="nf">(element) -&gt;</span>
-        <span class="k">for</span> <span class="nx">directive</span> <span class="k">in</span> <span class="nx">directives</span>
-          <span class="nx">expandTemplateInPlace</span> <span class="nx">element</span><span class="p">,</span> <span class="nx">directive</span>
-          <span class="k">break</span> <span class="k">if</span> <span class="nx">directive</span> <span class="o">==</span> <span class="kc">false</span>
-        <span class="k">return</span> <span class="kc">null</span></pre></div>             </td>           </tr>                               <tr id="section-13">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-13">&#182;</a>               </div>               <h1>expandInPlace</h1>
+to an <code>&amp;&amp;</code> operation on the results of the functions.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>  
+  <span class="nv">compose: </span><span class="nf">() -&gt;</span>
+    <span class="nv">directives = </span><span class="nx">arguments</span>
+    <span class="k">return</span> <span class="nf">(element) -&gt;</span>
+      <span class="k">for</span> <span class="nx">directive</span> <span class="k">in</span> <span class="nx">directives</span>
+        <span class="nx">expandTemplateInPlace</span> <span class="nx">element</span><span class="p">,</span> <span class="nx">directive</span>
+        <span class="k">break</span> <span class="k">if</span> <span class="nx">directive</span> <span class="o">==</span> <span class="kc">false</span>
+      <span class="k">return</span> <span class="kc">null</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-expandInPlace'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-expandInPlace">&#182;</a>
+        </div>
+        <h1>expandInPlace</h1>
 
 <p>You can also use <code>expandInPlace</code> to update a template in place. This needs to be used carefully,
-however. Since you're changing the template node, it's possible to change it in a way that it will
+however. Since you&rsquo;re changing the template node, it&rsquo;s possible to change it in a way that it will
 not work the same way in subsequent calls (if nodes are removed, for example). The DOM is also updated while the node
-is attached, potentially leading to performance problems as the browser redraws the page.</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nv">$.fn.expandInPlace = </span><span class="nf">(directive) -&gt;</span>
-    <span class="nx">expandTemplateInPlace</span><span class="p">(</span><span class="nx">$</span><span class="p">(</span><span class="nx">element</span><span class="p">),</span> <span class="nx">directive</span><span class="p">)</span> <span class="k">for</span> <span class="nx">element</span> <span class="k">in</span> <span class="k">this</span>
-    <span class="k">return</span> <span class="k">this</span>
-
-<span class="p">)(</span><span class="nx">jQuery</span><span class="p">)</span></pre></div>             </td>           </tr>                               <tr id="section-14">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-14">&#182;</a>               </div>               <h1>License</h1>
+is attached, potentially leading to performance problems as the browser redraws the page.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre><span class="nv">$.fn.expandInPlace = </span><span class="nf">(directive) -&gt;</span>
+  <span class="nx">expandTemplateInPlace</span><span class="p">(</span><span class="nx">$</span><span class="p">(</span><span class="nx">element</span><span class="p">),</span> <span class="nx">directive</span><span class="p">)</span> <span class="k">for</span> <span class="nx">element</span> <span class="k">in</span> <span class="k">this</span>
+  <span class="k">return</span> <span class="k">this</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-License'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-License">&#182;</a>
+        </div>
+        <h1>License</h1>
 
 <p><em>expand</em> is licensed under the MIT license.</p>
 
@@ -261,4 +475,14 @@ is attached, potentially leading to performance problems as the browser redraws 
 <li>Drew Colthorp (colthorp@atomicobject.com)</li>
 <li>© 2011 <a href="http://www.atomicobject.com/">Atomic Object</a></li>
 <li>More Atomic Object <a href="http://www.atomicobject.com/pages/Software+Commons">open source</a> projects</li>
-</ul>             </td>             <td class="code">               <div class="highlight"><pre></pre></div>             </td>           </tr>                </tbody>     </table>   </div> </body> </html> 
+</ul>
+
+
+      </td>
+      <td class=code>
+        <div class='highlight'><pre></pre></div>
+      </td>
+    </tr>
+  </table>
+</div>
+</body>
