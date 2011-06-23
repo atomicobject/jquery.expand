@@ -91,7 +91,9 @@ and JSON (actually JavaScript) directives.</p>
         <span class="nx">removeAttr</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">)</span>
 
   <span class="nx">expandTemplateInPlace</span><span class="p">(</span><span class="nx">element</span><span class="p">,</span> <span class="nx">directive</span><span class="p">)</span>
-  <span class="k">return</span> <span class="nx">element</span></pre></div>
+  <span class="k">return</span> <span class="nx">element</span>
+
+<span class="nv">isNoop = </span><span class="nf">(directive) -&gt;</span> <span class="nx">directive</span> <span class="k">in</span> <span class="p">[</span><span class="kc">null</span><span class="p">,</span> <span class="kc">undefined</span><span class="p">,</span> <span class="kc">true</span><span class="p">]</span></pre></div>
       </td>
     </tr>
     <tr id='section-Types_of_Directives'>
@@ -115,7 +117,7 @@ and JSON (actually JavaScript) directives.</p>
 <p><code>null</code>, <code>undefined</code>, and <code>true</code> all cause the element to be left untouched.</p>
       </td>
       <td class=code>
-        <div class='highlight'><pre>  <span class="k">return</span> <span class="nx">element</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="nx">directive</span> <span class="k">in</span> <span class="p">[</span><span class="kc">null</span><span class="p">,</span> <span class="kc">undefined</span><span class="p">,</span> <span class="kc">true</span><span class="p">]</span></pre></div>
+        <div class='highlight'><pre>  <span class="k">return</span> <span class="nx">element</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="nx">isNoop</span><span class="p">(</span><span class="nx">directive</span><span class="p">)</span></pre></div>
       </td>
     </tr>
     <tr id='section-4'>
@@ -405,6 +407,7 @@ to be used as an arbitrary css selector. For example,</p>
       </td>
       <td class=code>
         <div class='highlight'><pre>  <span class="nf">(propertyName, analog, jq) -&gt;</span>
+    <span class="k">return</span> <span class="kc">null</span> <span class="k">if</span> <span class="nx">isNoop</span><span class="p">(</span><span class="nx">analog</span><span class="p">)</span>
     <span class="nv">directive =</span>
       <span class="k">if</span> <span class="nx">propertyName</span><span class="p">.</span><span class="nx">charAt</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;$&quot;</span>
         <span class="nx">propertyName</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>

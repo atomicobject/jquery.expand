@@ -66,6 +66,8 @@ $.fn.expand = (directive) ->
   expandTemplateInPlace(element, directive)
   return element
 
+isNoop = (directive) -> directive in [null, undefined, true]
+
 # 
 # Types of Directives
 # ==================
@@ -74,7 +76,7 @@ expandTemplateInPlace = (element, directive) ->
   # Simple Directives
   # -------------------
   # `null`, `undefined`, and `true` all cause the element to be left untouched.
-  return element[0] if directive in [null, undefined, true]
+  return element[0] if isNoop(directive)
 
   # `false` causes the element to be removed.
   if directive == false
@@ -288,6 +290,7 @@ KEY_SYNTAX = [
   # * `{'$:text': {"val()": "foo"}}` will set the text of all text inputs/textareas to "foo".
 
   (propertyName, analog, jq) ->
+    return null if isNoop(analog)
     directive =
       if propertyName.charAt(0) == "$"
         propertyName.slice(1)

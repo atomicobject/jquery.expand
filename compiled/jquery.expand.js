@@ -1,5 +1,5 @@
 (function() {
-  var $, KEY_SYNTAX, expandTemplateInPlace;
+  var $, KEY_SYNTAX, expandTemplateInPlace, isNoop;
   var __hasProp = Object.prototype.hasOwnProperty;
   $ = jQuery;
   $.fn.expand = function(directive) {
@@ -8,9 +8,12 @@
     expandTemplateInPlace(element, directive);
     return element;
   };
+  isNoop = function(directive) {
+    return directive === null || directive === void 0 || directive === true;
+  };
   expandTemplateInPlace = function(element, directive) {
     var childTemplate, fragment, jq, matchDirective, node, property, propertyName, result, rule, _i, _j, _len, _len2, _ref;
-    if (directive === null || directive === void 0 || directive === true) {
+    if (isNoop(directive)) {
       return element[0];
     }
     if (directive === false) {
@@ -83,6 +86,9 @@
       }
     }, function(propertyName, analog, jq) {
       var directive, match, matches, _i, _len;
+      if (isNoop(analog)) {
+        return null;
+      }
       directive = propertyName.charAt(0) === "$" ? propertyName.slice(1) : "." + propertyName;
       matches = this.find(directive);
       for (_i = 0, _len = matches.length; _i < _len; _i++) {
