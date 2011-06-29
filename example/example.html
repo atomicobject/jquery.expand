@@ -1,0 +1,58 @@
+<html>
+  <head>
+    <script src="./jquery.js" type="text/javascript"></script>
+    <script src="../compiled/jquery.expand.min.js" type="text/javascript"></script>
+    <script src="https://raw.github.com/documentcloud/underscore/master/underscore-min.js" type="text/javascript"></script>
+  </head>
+  <body>
+    <div id="dashboard">
+      <div class="placeholder">Loading data...</div>
+    </div>
+
+    <div id="sidebar">
+      <div class="latest-message">
+        <h2>Latest News</h2>
+        <p class="text">
+          Loading data...
+        </p>
+      </div>
+    </div>
+
+    <script id="messages-template" type="text/html">
+      <ul class="messages">
+        <li><span class="text"></span></li>
+      </ul>
+    </script>
+
+    <script type="text/javascript">
+      var ajaxResult = [
+        {text: "John recieved your message.", value: "good"},
+        {text: "Your password is about to expire", value: "bad"},
+      ]
+
+      function formatMessage(m) {
+        return $.extend({ "addClass()": "status-"+m.value }, m);
+      }
+
+      function messagesLoaded(ajaxResult) {
+        var messageDirectives = $.map(ajaxResult, formatMessage);
+        $("#dashboard .placeholder").
+          replaceWith(
+              $("#messages-template").
+                expand(messageDirectives));
+
+        $("#sidebar .latest-message").
+          expandInPlace(messageDirectives[0]);
+      }
+
+      setTimeout("messagesLoaded(ajaxResult)", 1000);
+    </script>
+
+    <style type="text/css">
+      .messages .status-good { color: green; }
+      .messages .status-bad { color: red; }
+      .latest-message.status-good { background: #CFC; }
+      .latest-message.status-bad { background: #FCC; }
+    </style>
+  </body>
+</html>
